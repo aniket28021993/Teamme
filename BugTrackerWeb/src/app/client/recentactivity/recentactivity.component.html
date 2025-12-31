@@ -1,0 +1,29 @@
+
+<div class="recent-activities card">
+  <!--<div class="card-header">
+    <h3 class="h4">RECENT ACTIVITITES</h3>
+  </div>-->
+  <div class="card-body no-padding" *ngIf="RecentActicityList.length != 0">
+    <div class="item" *ngFor="let RecentActivityDate of RecentActicityList">
+      <div class="row">
+        <div class="col-2 date-holder text-right">
+          <div class="date d-inline-block"> <span>{{RecentActivityDate.CreatedOn | date}}</span></div>
+          <div class="icon d-inline-block"><i class="fa fa-clock-o"></i></div>
+        </div>
+        <div class="col-10 content">
+          <div *ngFor="let RecentActivity of RecentActivityDate.recentActivityDTO">
+            <p>
+              {{RecentActivity.UserName}} has changed
+              <span style="color:red">{{RecentActivity.ColumnName}}</span> <span *ngIf="RecentActivity.PreviousDescription!=''">from</span>
+              <span style="color:blue">{{RecentActivity.PreviousDescription}}</span>
+              to <span style="color:green">{{RecentActivity.NewDescription}}</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body no-padding" *ngIf="RecentActicityList.length == 0">
+    <h4 class="text-danger text-center">NO RECORD FOUND</h4>
+  </div>
+</div>

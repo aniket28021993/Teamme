@@ -1,0 +1,67 @@
+<app-header class="shadow-lg border-0" [fixed]="true"
+            [navbarBrandFull]="{src: 'assets/img/brand/teamme-logo.png', width: 89, height: 25, alt: 'CoreUI Logo'}"
+            [navbarBrandMinimized]="{src: 'assets/img/brand/teamme-logo.png', width: 30, height: 30, alt: 'CoreUI Logo'}"
+            [sidebarToggler]="'lg'"
+            [asideMenuToggler]="'lg'">
+  <mat-form-field class="mat-dropdown text-white" *ngIf="ProjectId!=0">
+    <mat-select [(ngModel)]="PhaseId" [ngModelOptions]="{standalone: true}" (selectionChange)="BindPhasetoLoggedIn()" [disabled]="Phaseobj.length == 0">
+      <mat-option *ngFor="let phase of Phaseobj" [value]="phase.PhaseId">
+        {{phase.Description}} ({{phase.StartDate | date}} - {{phase.EndDate | date}})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+        <img *ngIf="UserImage == undefined" src="assets/img/avatars/6.jpg" class="img-avatar" alt="TeamMe" />
+        <img *ngIf="UserImage != undefined" src="{{UserImage}}" class="img-avatar" alt="TeamMe" />
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+        <a class="dropdown-item" (click)="UserProfile()"><i class="fa fa-user"></i> Profile</a>
+        <a class="dropdown-item" (click)="ChangePassword()"><i class="fa fa-briefcase"></i> Change Password</a>
+        <a class="dropdown-item" (click)="Logout()"><i class="fa fa-lock"></i> Logout</a>
+      </div>
+    </li>
+  </ul>
+</app-header>
+<div class="app-body">
+  <app-sidebar #appSidebar [fixed]="true" routerLinkActive="active" [display]="'lg'" [minimized]="sidebarMinimized" (minimizedChange)="toggleMinimize($event)" class="shadow-lg">
+    <div class="row m-2 gobacktoproj" *ngIf="ProjectId != 0">
+      <div class="col-9">
+        <span class="teamme-color font-2xl text-truncate d-inline-block cur-pointer" (click)="GoToMainDashboard()" style="max-width:80px; margin-top:4px" title="{{ProjectName}}">{{ProjectName}}</span>
+      </div>
+      <div class="col-3">
+        <i class="fa fa-plus teamme-color fa-2x cur-pointer" (click)="openNav()"></i>
+      </div>
+    </div>
+    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="appSidebar.minimized"></app-sidebar-nav>
+    <!--<app-sidebar-minimizer></app-sidebar-minimizer>-->
+  </app-sidebar>
+  <!-- Main content -->
+  <main class="main" (click)="closeNav()">
+    <div class="col-12">
+      <h2 class="p-1">{{Breadcrumb}}</h2>
+    </div>
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
+    </div><!-- /.container-fluid -->
+  </main>
+</div>
+<app-footer class="shadow-lg border-0">
+  <span class="ml-auto">Powered by <a class="teamme-color">TeamME</a></span>
+</app-footer>
+
+<div class="sub-side-nav">
+  <div id="mySidepanel" class="sidepanel shadow-lg">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="teamme-color pr-2 pt-1 text-right icon-close font-weight-bold" (click)="closeNav()"></div>
+        <div class="p-3 sub-menu" [routerLink]="['/backlog/create',PhaseId,ProjectId]"><i class="fa fa-shield"></i> BACKLOG</div>
+        <div class="p-3 sub-menu" [routerLink]="['/task/create',0,PhaseId,ProjectId]"><i class="fa fa-shield"></i> TASK</div>
+        <div class="p-3 sub-menu" [routerLink]="['/enhancement/create',0,PhaseId,ProjectId]"><i class="fa fa-shield"></i> ENHANCEMENT</div>
+        <div class="p-3 sub-menu" [routerLink]="['/bug/create',0,PhaseId,ProjectId]"><i class="fa fa-shield"></i> BUG</div>
+        <div class="p-3 sub-menu" [routerLink]="['/testcase/create',0,PhaseId,ProjectId]"><i class="fa fa-shield"></i> TEST CASE</div>
+      </div>
+    </div>
+  </div>
+</div>

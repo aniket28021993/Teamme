@@ -1,0 +1,144 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<main class="projects">
+  <div class="container-fluid" *ngIf="ProjectLength!=undefined && ProjectLength == 0 && UserType !=5">
+    <div class="d-flex justify-content-center">
+      <div class="user_card text-center">
+        <span class="teamme-color font-weight-bolder font-2xl">Create a project to get started</span>
+        <div class="row p-5">
+          <div class="col-md-12">
+            <form class="form-horizontal form-custom">
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <div class="input-group">
+                    <input type="text" id="input1-group2" name="input1-group2" [(ngModel)]="Description" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Project Name">
+                  </div>
+                  <div class="text-left mt-1">
+                    <span class="text-danger" *ngIf="PopUpErroMessage != undefined || PopUpErroMessage != ''">{{PopUpErroMessage}}</span>
+                  </div>
+                </div>
+              </div>
+              <button type="button" (click)="CreateProject()" class="btn btn-outline-primary w-100">Create Project</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid" *ngIf="ProjectLength!=undefined && ProjectLength == 0 && UserType ==5">
+    <div class="text-center">
+      <img class="img-fluid" src="../../../assets/img/project.gif" height="350" width="350">
+      <div class="text-muted m-3">Please contact your admin to get started</div>
+    </div>
+  </div>
+
+  <div class="container-fluid" *ngIf="ProjectLength!=undefined && ProjectLength != 0">
+    <div class="row page-menu">
+      <div class="col-lg-4"></div>
+      <div class="col-lg-4 col-xs-12">
+        <input type="text" class="form-control shadow-lg" [(ngModel)]="SearchTaskval" placeholder="Search Project" (ngModelChange)="OnKeyPress()">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4" *ngIf="UserType !=5">
+        <div class="card shadow-lg m-4 teamme-bg-color">
+          <div class="card-body text-center form-custom">
+            <i class="fa fa-laptop fa-5x text-white"></i>
+            <h5 class="card-title text-white font-2xl" *ngIf="!IsCreateProject">Create New Project</h5>
+            <div class="form-group row" *ngIf="IsCreateProject">
+              <div class="col-md-12 col-xs-12">
+                <div class="input-group">
+                  <input type="text" id="input1-group2" name="input1-group2" [(ngModel)]="Description" [ngModelOptions]="{standalone: true}" class="form-control teamme-bg-color text-white">
+                </div>
+                <div class="text-left mt-1">
+                  <span class="text-white" *ngIf="PopUpErroMessage != undefined || PopUpErroMessage != ''">{{PopUpErroMessage}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer border-0">
+            <div class="text-right">
+              <i class="fa fa-2x fa-edit text-white" *ngIf="!IsCreateProject" (click)="IsCreateProject=true"></i>
+              <i class="fa fa-2x fa-close text-white" *ngIf="IsCreateProject" (click)="IsCreateProject=false;PopUpErroMessage='';Description=''"></i>
+              &nbsp;
+              <i class="fa fa-2x fa-save text-white" *ngIf="IsCreateProject" (click)="CreateProject()"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4" *ngFor="let project of Project">
+        <div class="card shadow-lg m-4">
+          <div class="card-body cur-pointer text-center" *ngIf="!project.IsCreateProject" (click)="GoToDashboard(project._ProjectId,project._ProjectName)">
+            <i class="fa fa-laptop fa-5x text-muted"></i>
+            <h5 class="card-title teamme-color font-2xl cur-pointer">{{project._ProjectName}}</h5>
+          </div>
+
+          <div class="card-body cur-pointer text-center" *ngIf="project.IsCreateProject">
+            <i class="fa fa-laptop fa-5x text-muted"></i>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <div class="input-group">
+                  <input type="text" id="input1-group2" name="input1-group2" [(ngModel)]="EditDescription" [ngModelOptions]="{standalone: true}" class="form-control teamme-color">
+                </div>
+                <div class="text-left mt-1">
+                  <span class="teamme-color" *ngIf="PopUpErroMessage != undefined || PopUpErroMessage != ''">{{PopUpErroMessage}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer border-0" *ngIf="UserType !=5">
+            <div class="text-right">
+              <i class="fa fa-2x fa-user teamme-color" *ngIf="!project.IsCreateProject" (click)="GetAllMapUser(project._ProjectId)"></i>
+              &nbsp;
+              <i class="fa fa-2x fa-trash teamme-color" *ngIf="!project.IsCreateProject" (click)="ProjectObj = project;deletedisplay=true;"></i>
+              &nbsp;
+              <i class="fa fa-2x fa-edit teamme-color" *ngIf="!project.IsCreateProject" (click)="project.IsCreateProject=true;EditDescription=project._ProjectName;PopUpErroMessage=''"></i>
+
+              <i class="fa fa-2x fa-close teamme-color" *ngIf="project.IsCreateProject" (click)="project.IsCreateProject=false;PopUpErroMessage=''"></i>
+              &nbsp;
+              <i class="fa fa-2x fa-save teamme-color" *ngIf="project.IsCreateProject" (click)="EditProject(project._ProjectId)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<p-dialog header="MAP USER" [(visible)]="mapdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <ng-multiselect-dropdown [placeholder]="'User'"
+                               [data]="MappeduserArr"
+                               [(ngModel)]="selectedItems"
+                               [settings]="dropdownSettings">
+      </ng-multiselect-dropdown>
+
+      <div class="text-left mt-1">
+        <span class="text-danger" *ngIf="PopUpErroMessage != undefined || PopUpErroMessage != ''">{{PopUpErroMessage}}</span>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="mapdisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="MapuserToProject()" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>
+
+<!--DELETE PROJECT-->
+<p-dialog header="DELETE PROJECT" [(visible)]="deletedisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to delete with it's phase,backlog,task,enhancement and bugs.</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="deletedisplay=false" class="btn btn-outline-primary">No</button>
+    <button type="button" (click)="DeleteProject(ProjectObj._ProjectId)" class="btn btn-outline-primary">Yes</button>
+  </p-footer>
+</p-dialog>

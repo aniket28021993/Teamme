@@ -1,0 +1,1722 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-xl-12 scrollbar" id="style-15">
+      <div class="card-group">
+        <div class="card border m-1">
+          <div class="card-header p-1" style="height:25px;">
+            New
+              <i class="fa fa-plus-circle cur-pointer float-right text-primary" *ngIf="!IsCreateBacklog && PhaseId != 0" (click)="IsCreateBacklog=!IsCreateBacklog"></i>
+              <i class="fa fa-minus-circle cur-pointer float-right text-primary" *ngIf="IsCreateBacklog && PhaseId != 0" (click)="IsCreateBacklog=!IsCreateBacklog"></i>
+          </div>
+          <div class="text-center" *ngIf="IsCreateBacklog">
+            <mat-form-field>
+              <input matInput placeholder="Please enter title" [(ngModel)]="BacklogTitle" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+            <i class="fa fa-save text-primary cur-pointer" (click)="CreateProductBacklog()"></i>
+          </div>
+          <div class="card-body p-0 border-bottom" *ngFor="let Backlog of BacklogData">
+            <div class="m-1">
+              <i class="fa fa-book text-info"></i>
+              <span>{{Backlog.ProductBacklogId}}</span>
+              <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Backlog.Title}}" (click)="OpenRightPanel(Backlog)">{{Backlog.Title}}</button>
+            </div>
+            <div class="m-1">
+              <div class="d-inline-block">
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.OwnerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Backlog.UserName}}"><span style="font-size:10px;">{{Backlog.OwnerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DesignerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Designer : {{Backlog.AssignedDesignerName}}"><span style="font-size:10px;">{{Backlog.DesignerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DeveloperInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Developer : {{Backlog.AssignedDeveloperName}}"><span style="font-size:10px;">{{Backlog.DeveloperInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.TesterInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Tester : {{Backlog.AssignedTesterName}}"><span style="font-size:10px;">{{Backlog.TesterInitial}}</span></div>
+                </div>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="Backlog.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBacklogState(Backlog)">
+                    <mat-option *ngFor="let TaskArr of BacklogStateArr" [value]="TaskArr.id">
+                      {{TaskArr.title}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="PhaseMoveToId" [ngModelOptions]="{standalone: true}" (selectionChange)="PhaseMoveTo(Backlog.ProductBacklogId)">
+                    <mat-option *ngFor="let phase of Phaseobj" [value]="phase.PhaseId">
+                      {{phase.Description}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="text-center pt-1 mt-2" style="background-color:whitesmoke;">
+              <i class="fa fa-tasks cur-pointer text-success mr-4" title="Task" (click)="OpenTaskPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-bug cur-pointer teamme-color mr-4" title="Bug" (click)="OpenBugPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-flask cur-pointer text-primary mr-4" title="Testcase" (click)="OpenTestcasePanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-exchange cur-pointer text-warning" title="Enhancement" (click)="OpenEnhancementPanel(Backlog.ProductBacklogId)"></i>
+            </div>
+            <div id="PBDataPanel" *ngIf="ProductBacklogId == Backlog.ProductBacklogId">
+              <div *ngIf="IsTaskShow">
+                <div class="text-center">
+                  <span class="text-success cur-pointer" *ngIf="!IsAddTask" (click)="IsAddTask=!IsAddTask">Add new task <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-success cur-pointer" *ngIf="IsAddTask" (click)="IsAddTask=!IsAddTask"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTask">
+                    <mat-label>Task</mat-label>
+                    <input matInput placeholder="Please enter task title" [(ngModel)]="TaskTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-success cur-pointer" *ngIf="IsAddTask" (click)="CreateTask()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:azure" *ngFor="let Task of TaskData">
+                    <div>
+                      <i class="fa fa-tasks text-success"></i>
+                      <span>{{Task.ProductBacklogDataId}}</span>
+                      <!--<span class="badge badge-primary badge-pill">{{Task.ProductBacklogDataId}}</span>-->
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Task.Title}}" (click)="OpenRightTaskPanel(Task);">{{Task.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Task.UserName}}"><span style="font-size:10px;">{{Task.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = Task.ProductBacklogDataId;changedisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="Task.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeTaskState(Task)">
+                              <mat-option *ngFor="let TaskArr of TaskStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsBugShow">
+                <div class="text-center">
+                  <span class="text-danger cur-pointer" *ngIf="!IsAddBug" (click)="IsAddBug=!IsAddBug">Add new bug <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-danger cur-pointer" *ngIf="IsAddBug" (click)="IsAddBug=!IsAddBug"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddBug">
+                    <mat-label>Bug</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="BugTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-danger cur-pointer" *ngIf="IsAddBug" (click)="CreateBug()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:seashell" *ngFor="let bug of BugData">
+                    <div>
+                      <i class="fa fa-bug text-danger"></i>
+                      <span>{{bug.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{bug.Title}}" (click)="OpenRightBugPanel(bug);">{{bug.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{bug.UserName}}"><span style="font-size:10px;">{{bug.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = bug.ProductBacklogDataId;changebugdisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="bug.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBugState(bug)">
+                              <mat-option *ngFor="let TaskArr of BugStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsTestCaseShow">
+                <div class="text-center">
+                  <span class="text-primary cur-pointer" *ngIf="!IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase">Add new test case <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTestCase">
+                    <mat-label>TestCase</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="TestCaseTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="CreateTestCase()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 bg-light border rounded-0" *ngFor="let testcase of TestCaseData">
+                    <div>
+                      <i class="fa fa-flask text-primary"></i>
+                      <span>{{testcase.TestCaseId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{testcase.Title}}" (click)="OpenRightTestCasePanel(testcase);">{{testcase.Title}}</button>
+                    </div>
+                    <div>
+                      <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                        <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{testcase.CreatedName}}"><span style="font-size:10px;">{{testcase.OwnerInitial}}</span></div>
+                      </div>
+                      <span class="text-success float-right" *ngIf="testcase.Result == 1">
+                        Pass
+                      </span>
+                      <span class="text-danger float-right" *ngIf="testcase.Result == 2">
+                        Failed
+                      </span>
+                      <span class="text-warning float-right" *ngIf="testcase.Result == 3">
+                        Not Executed
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsEnhancementShow">
+                <div class="text-center">
+                  <span class="text-warning cur-pointer" *ngIf="!IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement">Add new enhancement <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddEnhancement">
+                    <mat-label>Enhancement</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="EnhancementTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="CreateEnhancement()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:lemonchiffon" *ngFor="let enhancement of EnhancementData">
+                    <div>
+                      <i class="fa fa-exchange text-warning"></i>
+                      <span>{{enhancement.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{enhancement.Title}}" (click)="OpenRightEnhancementPanel(enhancement);">{{enhancement.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{enhancement.UserName}}"><span style="font-size:10px;">{{enhancement.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="TypeId" [ngModelOptions]="{standalone: true}" (selectionChange)="EnhancementToTaskBug(enhancement.ProductBacklogDataId)">
+                              <mat-option [value]="1">Task</mat-option>
+                              <mat-option [value]="3">Bug</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="enhancement.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeEnhancementState(enhancement)">
+                              <mat-option *ngFor="let TaskArr of EnhancementStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card border m-1">
+          <div class="card-header p-1" style="height:25px;">
+            Active
+          </div>
+          <div class="card-body p-0 border-bottom" *ngFor="let Backlog of BacklogDataProgress">
+            <div class="m-1">
+              <i class="fa fa-book text-info"></i>
+              <span>{{Backlog.ProductBacklogId}}</span>
+              <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Backlog.Title}}" (click)="OpenRightPanel(Backlog)">{{Backlog.Title}}</button>
+            </div>
+            <div class="m-1">
+              <div class="d-inline-block">
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.OwnerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Backlog.UserName}}"><span style="font-size:10px;">{{Backlog.OwnerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DesignerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Designer : {{Backlog.AssignedDesignerName}}"><span style="font-size:10px;">{{Backlog.DesignerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DeveloperInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Developer : {{Backlog.AssignedDeveloperName}}"><span style="font-size:10px;">{{Backlog.DeveloperInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.TesterInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Tester : {{Backlog.AssignedTesterName}}"><span style="font-size:10px;">{{Backlog.TesterInitial}}</span></div>
+                </div>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="Backlog.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBacklogState(Backlog)">
+                    <mat-option *ngFor="let TaskArr of BacklogStateArr" [value]="TaskArr.id">
+                      {{TaskArr.title}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="PhaseMoveToId" [ngModelOptions]="{standalone: true}" (selectionChange)="PhaseMoveTo(Backlog.ProductBacklogId)">
+                    <mat-option *ngFor="let phase of Phaseobj" [value]="phase.PhaseId">
+                      {{phase.Description}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="text-center pt-1 mt-2" style="background-color:whitesmoke;">
+              <i class="fa fa-tasks cur-pointer text-success mr-4" title="Task" (click)="OpenTaskPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-bug cur-pointer teamme-color mr-4" title="Bug" (click)="OpenBugPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-flask cur-pointer text-primary mr-4" title="Testcase" (click)="OpenTestcasePanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-exchange cur-pointer text-warning" title="Enhancement" (click)="OpenEnhancementPanel(Backlog.ProductBacklogId)"></i>
+            </div>
+            <div id="PBDataPanel" *ngIf="ProductBacklogId == Backlog.ProductBacklogId">
+              <div *ngIf="IsTaskShow">
+                <div class="text-center">
+                  <span class="text-success cur-pointer" *ngIf="!IsAddTask" (click)="IsAddTask=!IsAddTask">Add new task <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-success cur-pointer" *ngIf="IsAddTask" (click)="IsAddTask=!IsAddTask"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTask">
+                    <mat-label>Task</mat-label>
+                    <input matInput placeholder="Please enter task title" [(ngModel)]="TaskTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-success cur-pointer" *ngIf="IsAddTask" (click)="CreateTask()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:azure" *ngFor="let Task of TaskData">
+                    <div>
+                      <i class="fa fa-tasks text-success"></i>
+                      <span>{{Task.ProductBacklogDataId}}</span>
+                      <!--<span class="badge badge-primary badge-pill">{{Task.ProductBacklogDataId}}</span>-->
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Task.Title}}" (click)="OpenRightTaskPanel(Task);">{{Task.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Task.UserName}}"><span style="font-size:10px;">{{Task.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = Task.ProductBacklogDataId;changedisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="Task.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeTaskState(Task)">
+                              <mat-option *ngFor="let TaskArr of TaskStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsBugShow">
+                <div class="text-center">
+                  <span class="text-danger cur-pointer" *ngIf="!IsAddBug" (click)="IsAddBug=!IsAddBug">Add new bug <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-danger cur-pointer" *ngIf="IsAddBug" (click)="IsAddBug=!IsAddBug"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddBug">
+                    <mat-label>Bug</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="BugTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-danger cur-pointer" *ngIf="IsAddBug" (click)="CreateBug()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:seashell" *ngFor="let bug of BugData">
+                    <div>
+                      <i class="fa fa-bug text-danger"></i>
+                      <span>{{bug.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{bug.Title}}" (click)="OpenRightBugPanel(bug);">{{bug.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{bug.UserName}}"><span style="font-size:10px;">{{bug.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = bug.ProductBacklogDataId;changebugdisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="bug.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBugState(bug)">
+                              <mat-option *ngFor="let TaskArr of BugStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsTestCaseShow">
+                <div class="text-center">
+                  <span class="text-primary cur-pointer" *ngIf="!IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase">Add new test case <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTestCase">
+                    <mat-label>TestCase</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="TestCaseTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="CreateTestCase()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 bg-light border rounded-0" *ngFor="let testcase of TestCaseData">
+                    <div>
+                      <i class="fa fa-flask text-primary"></i>
+                      <span>{{testcase.TestCaseId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{testcase.Title}}" (click)="OpenRightTestCasePanel(testcase);">{{testcase.Title}}</button>
+                    </div>
+                    <div>
+                      <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                        <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{testcase.CreatedName}}"><span style="font-size:10px;">{{testcase.OwnerInitial}}</span></div>
+                      </div>
+                      <span class="text-success float-right" *ngIf="testcase.Result == 1">
+                        Pass
+                      </span>
+                      <span class="text-danger float-right" *ngIf="testcase.Result == 2">
+                        Failed
+                      </span>
+                      <span class="text-warning float-right" *ngIf="testcase.Result == 3">
+                        Not Executed
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsEnhancementShow">
+                <div class="text-center">
+                  <span class="text-warning cur-pointer" *ngIf="!IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement">Add new enhancement <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddEnhancement">
+                    <mat-label>Enhancement</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="EnhancementTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="CreateEnhancement()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:lemonchiffon" *ngFor="let enhancement of EnhancementData">
+                    <div>
+                      <i class="fa fa-exchange text-warning"></i>
+                      <span>{{enhancement.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{enhancement.Title}}" (click)="OpenRightEnhancementPanel(enhancement);">{{enhancement.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{enhancement.UserName}}"><span style="font-size:10px;">{{enhancement.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="TypeId" [ngModelOptions]="{standalone: true}" (selectionChange)="EnhancementToTaskBug(enhancement.ProductBacklogDataId)">
+                              <mat-option [value]="1">Task</mat-option>
+                              <mat-option [value]="3">Bug</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="enhancement.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeEnhancementState(enhancement)">
+                              <mat-option *ngFor="let TaskArr of EnhancementStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card border m-1">
+          <div class="card-header p-1" style="height:25px;">
+            Paused
+          </div>
+          <div class="card-body p-0 border-bottom" *ngFor="let Backlog of BacklogDataPaused">
+            <div class="m-1">
+              <i class="fa fa-book text-info"></i>
+              <span>{{Backlog.ProductBacklogId}}</span>
+              <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Backlog.Title}}" (click)="OpenRightPanel(Backlog)">{{Backlog.Title}}</button>
+            </div>
+            <div class="m-1">
+              <div class="d-inline-block">
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.OwnerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Backlog.UserName}}"><span style="font-size:10px;">{{Backlog.OwnerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DesignerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Designer : {{Backlog.AssignedDesignerName}}"><span style="font-size:10px;">{{Backlog.DesignerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DeveloperInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Developer : {{Backlog.AssignedDeveloperName}}"><span style="font-size:10px;">{{Backlog.DeveloperInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.TesterInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Tester : {{Backlog.AssignedTesterName}}"><span style="font-size:10px;">{{Backlog.TesterInitial}}</span></div>
+                </div>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="Backlog.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBacklogState(Backlog)">
+                    <mat-option *ngFor="let TaskArr of BacklogStateArr" [value]="TaskArr.id">
+                      {{TaskArr.title}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="PhaseMoveToId" [ngModelOptions]="{standalone: true}" (selectionChange)="PhaseMoveTo(Backlog.ProductBacklogId)">
+                    <mat-option *ngFor="let phase of Phaseobj" [value]="phase.PhaseId">
+                      {{phase.Description}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="text-center pt-1 mt-2" style="background-color:whitesmoke;">
+              <i class="fa fa-tasks cur-pointer text-success mr-4" title="Task" (click)="OpenTaskPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-bug cur-pointer teamme-color mr-4" title="Bug" (click)="OpenBugPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-flask cur-pointer text-primary mr-4" title="Testcase" (click)="OpenTestcasePanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-exchange cur-pointer text-warning" title="Enhancement" (click)="OpenEnhancementPanel(Backlog.ProductBacklogId)"></i>
+            </div>
+            <div id="PBDataPanel" *ngIf="ProductBacklogId == Backlog.ProductBacklogId">
+              <div *ngIf="IsTaskShow">
+                <div class="text-center">
+                  <span class="text-success cur-pointer" *ngIf="!IsAddTask" (click)="IsAddTask=!IsAddTask">Add new task <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-success cur-pointer" *ngIf="IsAddTask" (click)="IsAddTask=!IsAddTask"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTask">
+                    <mat-label>Task</mat-label>
+                    <input matInput placeholder="Please enter task title" [(ngModel)]="TaskTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-success cur-pointer" *ngIf="IsAddTask" (click)="CreateTask()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:azure" *ngFor="let Task of TaskData">
+                    <div>
+                      <i class="fa fa-tasks text-success"></i>
+                      <span>{{Task.ProductBacklogDataId}}</span>
+                      <!--<span class="badge badge-primary badge-pill">{{Task.ProductBacklogDataId}}</span>-->
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Task.Title}}" (click)="OpenRightTaskPanel(Task);">{{Task.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Task.UserName}}"><span style="font-size:10px;">{{Task.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = Task.ProductBacklogDataId;changedisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="Task.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeTaskState(Task)">
+                              <mat-option *ngFor="let TaskArr of TaskStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsBugShow">
+                <div class="text-center">
+                  <span class="text-danger cur-pointer" *ngIf="!IsAddBug" (click)="IsAddBug=!IsAddBug">Add new bug <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-danger cur-pointer" *ngIf="IsAddBug" (click)="IsAddBug=!IsAddBug"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddBug">
+                    <mat-label>Bug</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="BugTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-danger cur-pointer" *ngIf="IsAddBug" (click)="CreateBug()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:seashell" *ngFor="let bug of BugData">
+                    <div>
+                      <i class="fa fa-bug text-danger"></i>
+                      <span>{{bug.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{bug.Title}}" (click)="OpenRightBugPanel(bug);">{{bug.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{bug.UserName}}"><span style="font-size:10px;">{{bug.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = bug.ProductBacklogDataId;changebugdisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="bug.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBugState(bug)">
+                              <mat-option *ngFor="let TaskArr of BugStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsTestCaseShow">
+                <div class="text-center">
+                  <span class="text-primary cur-pointer" *ngIf="!IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase">Add new test case <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTestCase">
+                    <mat-label>TestCase</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="TestCaseTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="CreateTestCase()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 bg-light border rounded-0" *ngFor="let testcase of TestCaseData">
+                    <div>
+                      <i class="fa fa-flask text-primary"></i>
+                      <span>{{testcase.TestCaseId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{testcase.Title}}" (click)="OpenRightTestCasePanel(testcase);">{{testcase.Title}}</button>
+                    </div>
+                    <div>
+                      <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                        <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{testcase.CreatedName}}"><span style="font-size:10px;">{{testcase.OwnerInitial}}</span></div>
+                      </div>
+                      <span class="text-success float-right" *ngIf="testcase.Result == 1">
+                        Pass
+                      </span>
+                      <span class="text-danger float-right" *ngIf="testcase.Result == 2">
+                        Failed
+                      </span>
+                      <span class="text-warning float-right" *ngIf="testcase.Result == 3">
+                        Not Executed
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsEnhancementShow">
+                <div class="text-center">
+                  <span class="text-warning cur-pointer" *ngIf="!IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement">Add new enhancement <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddEnhancement">
+                    <mat-label>Enhancement</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="EnhancementTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="CreateEnhancement()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:lemonchiffon" *ngFor="let enhancement of EnhancementData">
+                    <div>
+                      <i class="fa fa-exchange text-warning"></i>
+                      <span>{{enhancement.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{enhancement.Title}}" (click)="OpenRightEnhancementPanel(enhancement);">{{enhancement.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{enhancement.UserName}}"><span style="font-size:10px;">{{enhancement.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="TypeId" [ngModelOptions]="{standalone: true}" (selectionChange)="EnhancementToTaskBug(enhancement.ProductBacklogDataId)">
+                              <mat-option [value]="1">Task</mat-option>
+                              <mat-option [value]="3">Bug</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="enhancement.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeEnhancementState(enhancement)">
+                              <mat-option *ngFor="let TaskArr of EnhancementStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card border m-1">
+          <div class="card-header p-1" style="height:25px;">
+            Testing
+          </div>
+          <div class="card-body p-0 border-bottom" *ngFor="let Backlog of BacklogDataTesting">
+            <div class="m-1">
+              <i class="fa fa-book text-info"></i>
+              <span>{{Backlog.ProductBacklogId}}</span>
+              <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Backlog.Title}}" (click)="OpenRightPanel(Backlog)">{{Backlog.Title}}</button>
+            </div>
+            <div class="m-1">
+              <div class="d-inline-block">
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.OwnerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Backlog.UserName}}"><span style="font-size:10px;">{{Backlog.OwnerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DesignerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Designer : {{Backlog.AssignedDesignerName}}"><span style="font-size:10px;">{{Backlog.DesignerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DeveloperInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Developer : {{Backlog.AssignedDeveloperName}}"><span style="font-size:10px;">{{Backlog.DeveloperInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.TesterInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Tester : {{Backlog.AssignedTesterName}}"><span style="font-size:10px;">{{Backlog.TesterInitial}}</span></div>
+                </div>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="Backlog.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBacklogState(Backlog)">
+                    <mat-option *ngFor="let TaskArr of BacklogStateArr" [value]="TaskArr.id">
+                      {{TaskArr.title}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="PhaseMoveToId" [ngModelOptions]="{standalone: true}" (selectionChange)="PhaseMoveTo(Backlog.ProductBacklogId)">
+                    <mat-option *ngFor="let phase of Phaseobj" [value]="phase.PhaseId">
+                      {{phase.Description}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="text-center pt-1 mt-2" style="background-color:whitesmoke;">
+              <i class="fa fa-tasks cur-pointer text-success mr-4" title="Task" (click)="OpenTaskPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-bug cur-pointer teamme-color mr-4" title="Bug" (click)="OpenBugPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-flask cur-pointer text-primary mr-4" title="Testcase" (click)="OpenTestcasePanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-exchange cur-pointer text-warning" title="Enhancement" (click)="OpenEnhancementPanel(Backlog.ProductBacklogId)"></i>
+            </div>
+            <div id="PBDataPanel" *ngIf="ProductBacklogId == Backlog.ProductBacklogId">
+              <div *ngIf="IsTaskShow">
+                <div class="text-center">
+                  <span class="text-success cur-pointer" *ngIf="!IsAddTask" (click)="IsAddTask=!IsAddTask">Add new task <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-success cur-pointer" *ngIf="IsAddTask" (click)="IsAddTask=!IsAddTask"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTask">
+                    <mat-label>Task</mat-label>
+                    <input matInput placeholder="Please enter task title" [(ngModel)]="TaskTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-success cur-pointer" *ngIf="IsAddTask" (click)="CreateTask()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:azure" *ngFor="let Task of TaskData">
+                    <div>
+                      <i class="fa fa-tasks text-success"></i>
+                      <span>{{Task.ProductBacklogDataId}}</span>
+                      <!--<span class="badge badge-primary badge-pill">{{Task.ProductBacklogDataId}}</span>-->
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Task.Title}}" (click)="OpenRightTaskPanel(Task);">{{Task.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Task.UserName}}"><span style="font-size:10px;">{{Task.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = Task.ProductBacklogDataId;changedisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="Task.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeTaskState(Task)">
+                              <mat-option *ngFor="let TaskArr of TaskStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsBugShow">
+                <div class="text-center">
+                  <span class="text-danger cur-pointer" *ngIf="!IsAddBug" (click)="IsAddBug=!IsAddBug">Add new bug <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-danger cur-pointer" *ngIf="IsAddBug" (click)="IsAddBug=!IsAddBug"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddBug">
+                    <mat-label>Bug</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="BugTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-danger cur-pointer" *ngIf="IsAddBug" (click)="CreateBug()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:seashell" *ngFor="let bug of BugData">
+                    <div>
+                      <i class="fa fa-bug text-danger"></i>
+                      <span>{{bug.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{bug.Title}}" (click)="OpenRightBugPanel(bug);">{{bug.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{bug.UserName}}"><span style="font-size:10px;">{{bug.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = bug.ProductBacklogDataId;changebugdisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="bug.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBugState(bug)">
+                              <mat-option *ngFor="let TaskArr of BugStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsTestCaseShow">
+                <div class="text-center">
+                  <span class="text-primary cur-pointer" *ngIf="!IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase">Add new test case <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTestCase">
+                    <mat-label>TestCase</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="TestCaseTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="CreateTestCase()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 bg-light border rounded-0" *ngFor="let testcase of TestCaseData">
+                    <div>
+                      <i class="fa fa-flask text-primary"></i>
+                      <span>{{testcase.TestCaseId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{testcase.Title}}" (click)="OpenRightTestCasePanel(testcase);">{{testcase.Title}}</button>
+                    </div>
+                    <div>
+                      <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                        <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{testcase.CreatedName}}"><span style="font-size:10px;">{{testcase.OwnerInitial}}</span></div>
+                      </div>
+                      <span class="text-success float-right" *ngIf="testcase.Result == 1">
+                        Pass
+                      </span>
+                      <span class="text-danger float-right" *ngIf="testcase.Result == 2">
+                        Failed
+                      </span>
+                      <span class="text-warning float-right" *ngIf="testcase.Result == 3">
+                        Not Executed
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsEnhancementShow">
+                <div class="text-center">
+                  <span class="text-warning cur-pointer" *ngIf="!IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement">Add new enhancement <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddEnhancement">
+                    <mat-label>Enhancement</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="EnhancementTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="CreateEnhancement()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:lemonchiffon" *ngFor="let enhancement of EnhancementData">
+                    <div>
+                      <i class="fa fa-exchange text-warning"></i>
+                      <span>{{enhancement.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{enhancement.Title}}" (click)="OpenRightEnhancementPanel(enhancement);">{{enhancement.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{enhancement.UserName}}"><span style="font-size:10px;">{{enhancement.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="TypeId" [ngModelOptions]="{standalone: true}" (selectionChange)="EnhancementToTaskBug(enhancement.ProductBacklogDataId)">
+                              <mat-option [value]="1">Task</mat-option>
+                              <mat-option [value]="3">Bug</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="enhancement.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeEnhancementState(enhancement)">
+                              <mat-option *ngFor="let TaskArr of EnhancementStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card border m-1">
+          <div class="card-header p-1" style="height:25px;">
+            Done
+          </div>
+          <div class="card-body p-0 border-bottom" *ngFor="let Backlog of BacklogDataDone">
+            <div class="m-1">
+              <i class="fa fa-book text-info"></i>
+              <span>{{Backlog.ProductBacklogId}}</span>
+              <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Backlog.Title}}" (click)="OpenRightPanel(Backlog)">{{Backlog.Title}}</button>
+            </div>
+            <div class="m-1">
+              <div class="d-inline-block">
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.OwnerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Backlog.UserName}}"><span style="font-size:10px;">{{Backlog.OwnerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DesignerInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Designer : {{Backlog.AssignedDesignerName}}"><span style="font-size:10px;">{{Backlog.DesignerInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.DeveloperInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Developer : {{Backlog.AssignedDeveloperName}}"><span style="font-size:10px;">{{Backlog.DeveloperInitial}}</span></div>
+                </div>
+                <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme" *ngIf="Backlog.TesterInitial != ''">
+                  <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Tester : {{Backlog.AssignedTesterName}}"><span style="font-size:10px;">{{Backlog.TesterInitial}}</span></div>
+                </div>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="Backlog.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBacklogState(Backlog)">
+                    <mat-option *ngFor="let TaskArr of BacklogStateArr" [value]="TaskArr.id">
+                      {{TaskArr.title}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="d-inline-block dd-custom ml-1">
+                <mat-form-field class="mat-dropdown">
+                  <mat-select [(ngModel)]="PhaseMoveToId" [ngModelOptions]="{standalone: true}" (selectionChange)="PhaseMoveTo(Backlog.ProductBacklogId)">
+                    <mat-option *ngFor="let phase of Phaseobj" [value]="phase.PhaseId">
+                      {{phase.Description}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="text-center pt-1 mt-2" style="background-color:whitesmoke;">
+              <i class="fa fa-tasks cur-pointer text-success mr-4" title="Task" (click)="OpenTaskPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-bug cur-pointer teamme-color mr-4" title="Bug" (click)="OpenBugPanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-flask cur-pointer text-primary mr-4" title="Testcase" (click)="OpenTestcasePanel(Backlog.ProductBacklogId)"></i>
+              <i class="fa fa-exchange cur-pointer text-warning" title="Enhancement" (click)="OpenEnhancementPanel(Backlog.ProductBacklogId)"></i>
+            </div>
+            <div id="PBDataPanel" *ngIf="ProductBacklogId == Backlog.ProductBacklogId">
+              <div *ngIf="IsTaskShow">
+                <div class="text-center">
+                  <span class="text-success cur-pointer" *ngIf="!IsAddTask" (click)="IsAddTask=!IsAddTask">Add new task <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-success cur-pointer" *ngIf="IsAddTask" (click)="IsAddTask=!IsAddTask"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTask">
+                    <mat-label>Task</mat-label>
+                    <input matInput placeholder="Please enter task title" [(ngModel)]="TaskTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-success cur-pointer" *ngIf="IsAddTask" (click)="CreateTask()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:azure" *ngFor="let Task of TaskData">
+                    <div>
+                      <i class="fa fa-tasks text-success"></i>
+                      <span>{{Task.ProductBacklogDataId}}</span>
+                      <!--<span class="badge badge-primary badge-pill">{{Task.ProductBacklogDataId}}</span>-->
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{Task.Title}}" (click)="OpenRightTaskPanel(Task);">{{Task.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{Task.UserName}}"><span style="font-size:10px;">{{Task.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = Task.ProductBacklogDataId;changedisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="Task.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeTaskState(Task)">
+                              <mat-option *ngFor="let TaskArr of TaskStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsBugShow">
+                <div class="text-center">
+                  <span class="text-danger cur-pointer" *ngIf="!IsAddBug" (click)="IsAddBug=!IsAddBug">Add new bug <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-danger cur-pointer" *ngIf="IsAddBug" (click)="IsAddBug=!IsAddBug"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddBug">
+                    <mat-label>Bug</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="BugTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-danger cur-pointer" *ngIf="IsAddBug" (click)="CreateBug()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:seashell" *ngFor="let bug of BugData">
+                    <div>
+                      <i class="fa fa-bug text-danger"></i>
+                      <span>{{bug.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{bug.Title}}" (click)="OpenRightBugPanel(bug);">{{bug.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{bug.UserName}}"><span style="font-size:10px;">{{bug.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-link p-0" (click)="DeleteProductBacklogDataId = bug.ProductBacklogDataId;changebugdisplay=true;" style="font-size:12px;" title="Move to Enhancement">Enhancement</button>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="bug.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeBugState(bug)">
+                              <mat-option *ngFor="let TaskArr of BugStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsTestCaseShow">
+                <div class="text-center">
+                  <span class="text-primary cur-pointer" *ngIf="!IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase">Add new test case <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="IsAddTestCase=!IsAddTestCase"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddTestCase">
+                    <mat-label>TestCase</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="TestCaseTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-primary cur-pointer" *ngIf="IsAddTestCase" (click)="CreateTestCase()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 bg-light border rounded-0" *ngFor="let testcase of TestCaseData">
+                    <div>
+                      <i class="fa fa-flask text-primary"></i>
+                      <span>{{testcase.TestCaseId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{testcase.Title}}" (click)="OpenRightTestCasePanel(testcase);">{{testcase.Title}}</button>
+                    </div>
+                    <div>
+                      <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                        <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{testcase.CreatedName}}"><span style="font-size:10px;">{{testcase.OwnerInitial}}</span></div>
+                      </div>
+                      <span class="text-success float-right" *ngIf="testcase.Result == 1">
+                        Pass
+                      </span>
+                      <span class="text-danger float-right" *ngIf="testcase.Result == 2">
+                        Failed
+                      </span>
+                      <span class="text-warning float-right" *ngIf="testcase.Result == 3">
+                        Not Executed
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="IsEnhancementShow">
+                <div class="text-center">
+                  <span class="text-warning cur-pointer" *ngIf="!IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement">Add new enhancement <i class="fa fa-plus-circle"></i></span>
+                  <span class="text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="IsAddEnhancement=!IsAddEnhancement"><i class="fa fa-minus-circle"></i></span>
+                  <hr class="m-0" />
+                  <mat-form-field *ngIf="IsAddEnhancement">
+                    <mat-label>Enhancement</mat-label>
+                    <input matInput placeholder="Please enter title" [(ngModel)]="EnhancementTitle" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-save text-warning cur-pointer" *ngIf="IsAddEnhancement" (click)="CreateEnhancement()"></i>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item align-items-center p-1 border rounded-0" style="background-color:lemonchiffon" *ngFor="let enhancement of EnhancementData">
+                    <div>
+                      <i class="fa fa-exchange text-warning"></i>
+                      <span>{{enhancement.ProductBacklogDataId}}</span>
+                      <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 120px;" title="{{enhancement.Title}}" (click)="OpenRightEnhancementPanel(enhancement);">{{enhancement.Title}}</button>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                          <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block" title="Owner : {{enhancement.UserName}}"><span style="font-size:10px;">{{enhancement.OwnerInitial}}</span></div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="TypeId" [ngModelOptions]="{standalone: true}" (selectionChange)="EnhancementToTaskBug(enhancement.ProductBacklogDataId)">
+                              <mat-option [value]="1">Task</mat-option>
+                              <mat-option [value]="3">Bug</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <span class="dd-custom">
+                          <mat-form-field class="mat-dropdown">
+                            <mat-select [(ngModel)]="enhancement.State" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeEnhancementState(enhancement)">
+                              <mat-option *ngFor="let TaskArr of EnhancementStateArr" [value]="TaskArr.id">
+                                {{TaskArr.title}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="RightSidepanel" class="rightsidepanel shadow-lg">
+  <!--BACKLOG-->
+  <div *ngIf="IsEditBacklog">
+    <div class="row teamme-bg-color text-white p-3 RS-header" *ngIf="EditBacklogData!=null">
+      <div class="col-xl-8">
+        <span>Owner: {{EditBacklogData.UserName}}</span>
+      </div>
+      <div class="col-xl-4 text-right">
+        <i class="fa fa-save cur-pointer mr-2" title="Save" (click)="EditProductBacklog()"></i>
+        <i class="fa fa-trash cur-pointer mr-2" title="Delete" (click)="deletedisplay=true;"></i>
+        <i class="fa cur-pointer fa-close" (click)="CloseRightPanel()" title="Close"></i>
+      </div>
+    </div>
+    <mat-tab-group *ngIf="EditBacklogData!=null" #tabGroup (click)="OnTabClick()">
+      <mat-tab label="Backlog {{EditBacklogData.ProductBacklogId}}">
+        <form class="p-3">
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="d-inline-block w-100">
+                <mat-form-field class="w-100">
+                  <mat-label>Title</mat-label>
+                  <input matInput placeholder="Please enter title" [(ngModel)]="EditBacklogData.Title" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12">
+              <ckeditor [(ngModel)]="EditBacklogData.Description" [ngModelOptions]="{standalone: true}" [config]="{extraPlugins: 'divarea'}"></ckeditor>
+            </div>
+          </div>
+          <div class="row asignee-dd mt-2">
+            <div class="col-xl-4">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select Developer</mat-label>
+                <mat-select [(ngModel)]="EditBacklogData.AssignedDeveloper" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                    {{User.UserName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-4">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select Designer</mat-label>
+                <mat-select [(ngModel)]="EditBacklogData.AssignedDesigner" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                    {{User.UserName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-4">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select Tester</mat-label>
+                <mat-select [(ngModel)]="EditBacklogData.AssignedTester" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                    {{User.UserName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-xl-4">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select state</mat-label>
+                <mat-select [(ngModel)]="EditBacklogData.State" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let TaskArr of BacklogStateArr" [value]="TaskArr.id">
+                    {{TaskArr.title}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-4">
+              <mat-form-field class="w-100">
+                <mat-label>Estimation(hrs) &nbsp;<i class="fa fa-hourglass-half cur-pointer mr-2 fa-spin"></i></mat-label>
+                <input matInput [(ngModel)]="EditBacklogData.Estimation" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+            <!--<div class="col-xl-4">
+              <button type="button" class="btn btn-outline-primary float-right" (click)="EditProductBacklog()">Save</button>
+            </div>-->
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="Comment">
+        <div *ngIf="IsBacklogComment">
+          <app-comment [ProductBacklogId]="EditBacklogData.ProductBacklogId" [CommentTypeId]="1"></app-comment>
+        </div>
+      </mat-tab>
+      <mat-tab label="Recent Activity">
+        <div *ngIf="IsBacklogActivity">
+          <app-recentactivity [CommonId]="EditBacklogData.ProductBacklogId" [RecentActivityId]="1"></app-recentactivity>
+        </div>
+      </mat-tab>
+      <mat-tab label="Files">
+        <div class="card">
+          <div class="card-body">
+            <input type="file" id="filecontrol" accept=".pdf,.doc,.docx,.xls,.csv,.ppt,.pptx,image/*" multiple (change)="onFileChange($event,EditBacklogData.ProductBacklogId)">
+            <label for="filecontrol">choose a file</label>
+            <ul class="list-none p-0">
+              <li class="alert alert-warning alert-dismissible fade show m-1 p-1" *ngFor="let file of EditBacklogData.ProductBacklogFile">
+                {{file.FileName}}
+                <i class="cur-pointer fa fa-close text-danger float-right ml-3" (click)="DeleteProductBacklogFile(file.ProductBacklogFileId)"></i>
+                <a href="{{Url}}{{file.RefFileName}}&FileName={{file.FileName}}"><i class="cur-pointer fa fa-download text-primary float-right"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!--TASK-->
+  <div *ngIf="IsEditTask">
+    <div class="row teamme-bg-color text-white p-3 RS-header" *ngIf="EditTaskData!=null">
+      <div class="col-xl-8">
+        <span>Owner: {{EditTaskData.UserName}}</span>
+      </div>
+      <div class="col-xl-4 text-right">
+        <i class="fa fa-save cur-pointer mr-2" title="Save" (click)="EditTask()"></i>
+        <i class="fa fa-trash cur-pointer mr-2" title="Delete" (click)="deletetaskdisplay = true;"></i>
+        <i class="fa cur-pointer fa-close" (click)="CloseRightPanel()" title="Close"></i>
+      </div>
+    </div>
+    <mat-tab-group *ngIf="EditTaskData!=null" #tabGroup (click)="OnTabClick()">
+      <mat-tab label="Task {{EditTaskData.ProductBacklogDataId}}">
+        <form class="p-3">
+          <div class="row">
+            <div class="col-xl-12">
+              <mat-form-field class="w-100">
+                <mat-label>Title</mat-label>
+                <input matInput placeholder="Please enter title" [(ngModel)]="EditTaskData.Title" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12">
+              <ckeditor [(ngModel)]="EditTaskData.Description" [ngModelOptions]="{standalone: true}" [config]="{extraPlugins: 'divarea'}"></ckeditor>
+            </div>
+          </div>
+          <div class="row asignee-dd mt-2">
+            <div class="col-xl-6">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select User</mat-label>
+                <mat-select [(ngModel)]="EditTaskData.AssignedTo" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                    {{User.UserName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select State</mat-label>
+                <mat-select [(ngModel)]="EditTaskData.State" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let TaskArr of TaskStateArr" [value]="TaskArr.id">
+                    {{TaskArr.title}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <mat-form-field class="w-100">
+                <mat-label>Total Estimation(hrs) &nbsp;<i class="fa fa-hourglass-half cur-pointer mr-2 fa-spin"></i></mat-label>
+                <input matInput placeholder="Please enter total hrs" [(ngModel)]="EditTaskData.Estimation" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <mat-form-field class="w-100">
+                <mat-label>Used Estimation(hrs) &nbsp;<i class="fa fa-hourglass-half cur-pointer mr-2 fa-spin"></i></mat-label>
+                <input matInput placeholder="Please enter used hrs" [(ngModel)]="EditTaskData.UsedEstimation" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <mat-form-field class="w-100">
+                <mat-label>Remaining Estimation(hrs) &nbsp;<i class="fa fa-hourglass-half cur-pointer mr-2 fa-spin"></i></mat-label>
+                <input matInput placeholder="Please enter remaining hrs" [(ngModel)]="EditTaskData.RemainingEstimation" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="Comment">
+        <div *ngIf="IsTaskComment">
+          <app-comment [ProductBacklogId]="EditTaskData.ProductBacklogDataId" [CommentTypeId]="2"></app-comment>
+        </div>
+      </mat-tab>
+      <mat-tab label="Recent Activity">
+        <div *ngIf="IsTaskActivity">
+          <app-recentactivity [CommonId]="EditTaskData.ProductBacklogDataId" [RecentActivityId]="3"></app-recentactivity>
+        </div>
+      </mat-tab>
+      <mat-tab label="Files">
+        <div class="card">
+          <div class="card-body">
+            <input type="file" id="file" accept=".pdf,.doc,.docx,.xls,.csv,.ppt,.pptx,image/*" multiple (change)="onTaskFileChange($event,EditTaskData.ProductBacklogDataId)">
+            <label for="file">choose a file</label>
+            <ul class="list-none p-0">
+              <li class="alert alert-warning alert-dismissible fade show m-1 p-1" *ngFor="let file of EditTaskData.ProductBacklogFile">
+                {{file.FileName}}
+                <i class="cur-pointer fa fa-close text-danger float-right ml-3" (click)="DeleteTaskFile(file.ProductBacklogFileId)"></i>
+                <a href="{{Url}}{{file.RefFileName}}&FileName={{file.FileName}}"><i class="cur-pointer fa fa-download text-primary float-right"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!--BUG-->
+  <div *ngIf="IsEditBug">
+    <div class="row teamme-bg-color text-white p-3 RS-header" *ngIf="EditBugData!=null">
+      <div class="col-xl-8">
+        <span>Owner: {{EditBugData.UserName}}</span>
+      </div>
+      <div class="col-xl-4 text-right">
+        <i class="fa fa-save cur-pointer mr-2" title="Save" (click)="EditBug()"></i>
+        <i class="fa fa-trash cur-pointer mr-2" title="Delete" (click)="deletebugdisplay = true;"></i>
+        <i class="fa cur-pointer fa-close" (click)="CloseRightPanel()" title="Close"></i>
+      </div>
+    </div>
+    <mat-tab-group *ngIf="EditBugData!=null" #tabGroup (click)="OnTabClick()">
+      <mat-tab label="Bug {{EditBugData.ProductBacklogDataId}}">
+        <form class="p-3">
+          <div class="row">
+            <div class="col-xl-12">
+              <mat-form-field class="w-100">
+                <mat-label>Title</mat-label>
+                <input matInput placeholder="Please enter title" [(ngModel)]="EditBugData.Title" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12">
+              <ckeditor [(ngModel)]="EditBugData.Description" [ngModelOptions]="{standalone: true}" [config]="{extraPlugins: 'divarea'}"></ckeditor>
+            </div>
+          </div>
+          <div class="row asignee-dd mt-2">
+            <div class="col-xl-6">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select User</mat-label>
+                <mat-select [(ngModel)]="EditBugData.AssignedTo" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                    {{User.UserName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select State</mat-label>
+                <mat-select [(ngModel)]="EditBugData.State" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let BugArr of BugStateArr" [value]="BugArr.id">
+                    {{BugArr.title}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12">
+              <mat-radio-group aria-label="Select an option" [(ngModel)]="EditBugData.PriorityId" [ngModelOptions]="{standalone: true}">
+                <mat-radio-button [value]="1">Priority 1</mat-radio-button>
+                <mat-radio-button [value]="2">Priority 2</mat-radio-button>
+                <mat-radio-button [value]="3">Priority 3</mat-radio-button>
+                <mat-radio-button [value]="4">Priority 4</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="Comment">
+        <app-comment [ProductBacklogId]="EditBugData.ProductBacklogDataId" [CommentTypeId]="4"></app-comment>
+      </mat-tab>
+      <mat-tab label="Recent Activity">
+        <app-recentactivity [CommonId]="EditBugData.ProductBacklogDataId" [RecentActivityId]="2"></app-recentactivity>
+      </mat-tab>
+      <mat-tab label="Files">
+        <div class="card">
+          <div class="card-body">
+            <input type="file" id="filecontrol" accept=".pdf,.doc,.docx,.xls,.csv,.ppt,.pptx,image/*" multiple (change)="onBugFileChange($event,EditBugData.ProductBacklogDataId)">
+            <label for="filecontrol">choose a file</label>
+            <ul class="list-none p-0">
+              <li class="alert alert-warning alert-dismissible fade show m-1 p-1" *ngFor="let file of EditBugData.ProductBacklogFile">
+                {{file.FileName}}
+                <i class="cur-pointer fa fa-close text-danger float-right ml-3" (click)="DeleteBugFile(file.ProductBacklogFileId)"></i>
+                <a href="{{Url}}{{file.RefFileName}}&FileName={{file.FileName}}"><i class="cur-pointer fa fa-download text-primary float-right"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+  </div>
+
+  <!--ENHANCEMENT-->
+  <div *ngIf="IsEditEnhancement">
+    <div class="row teamme-bg-color text-white p-3 RS-header" *ngIf="EditEnhancementData!=null">
+      <div class="col-xl-8">
+        <span>Owner: {{EditEnhancementData.UserName}}</span>
+      </div>
+      <div class="col-xl-4 text-right">
+        <i class="fa fa-save cur-pointer mr-2" title="Save" (click)="EditEnhancement()"></i>
+        <i class="fa fa-trash cur-pointer mr-2" title="Delete" (click)="deleteenhancementdisplay = true;"></i>
+        <i class="fa cur-pointer fa-close" (click)="CloseRightPanel()" title="Close"></i>
+      </div>
+    </div>
+
+    <mat-tab-group *ngIf="EditEnhancementData!=null" #tabGroup (click)="OnTabClick()">
+      <mat-tab label="Enhancement {{EditEnhancementData.ProductBacklogDataId}}">
+        <form class="p-3">
+          <div class="row">
+            <div class="col-xl-12">
+              <mat-form-field class="w-100">
+                <mat-label>Title</mat-label>
+                <input matInput placeholder="Please enter title" [(ngModel)]="EditEnhancementData.Title" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12">
+              <ckeditor [(ngModel)]="EditEnhancementData.Description" [ngModelOptions]="{standalone: true}" [config]="{extraPlugins: 'divarea'}"></ckeditor>
+            </div>
+          </div>
+          <div class="row asignee-dd mt-2">
+            <div class="col-xl-6">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select User</mat-label>
+                <mat-select [(ngModel)]="EditEnhancementData.AssignedTo" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                    {{User.UserName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+              <mat-form-field class="mat-dropdown">
+                <mat-label>Select State</mat-label>
+                <mat-select [(ngModel)]="EditEnhancementData.State" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let EnhancementArr of EnhancementStateArr" [value]="EnhancementArr.id">
+                    {{EnhancementArr.title}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="Comment">
+        <div *ngIf="IsEnhancementComment">
+          <app-comment [ProductBacklogId]="EditEnhancementData.ProductBacklogDataId" [CommentTypeId]="3"></app-comment>
+        </div> 
+      </mat-tab>
+      <mat-tab label="Recent Activity">
+        <div *ngIf="IsEnhancementActivity">
+          <app-recentactivity [CommonId]="EditEnhancementData.ProductBacklogDataId" [RecentActivityId]="4"></app-recentactivity>
+        </div>
+      </mat-tab>
+      <mat-tab label="Files">
+        <div class="card">
+          <div class="card-body">
+            <input type="file" id="filecontrol" accept=".pdf,.doc,.docx,.xls,.csv,.ppt,.pptx,image/*" multiple (change)="onEnhancementFileChange($event,EditEnhancementData.ProductBacklogDataId)">
+            <label for="filecontrol">choose a file</label>
+            <ul class="list-none p-0">
+              <li class="alert alert-warning alert-dismissible fade show m-1 p-1" *ngFor="let file of EditEnhancementData.ProductBacklogFile">
+                {{file.FileName}}
+                <i class="cur-pointer fa fa-close text-danger float-right ml-3" (click)="DeleteEnhancementFile(file.ProductBacklogFileId)"></i>
+                <a href="{{Url}}{{file.RefFileName}}&FileName={{file.FileName}}"><i class="cur-pointer fa fa-download text-primary float-right"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!--TESTCASE-->
+  <div *ngIf="IsEditTestCase">
+    <div class="row teamme-bg-color text-white p-3 RS-header" *ngIf="EditTestCaseData!=null">
+      <div class="col-xl-8">
+        <span>Owner: Monika Gujar</span>
+      </div>
+      <div class="col-xl-4 text-right">
+        <i class="fa fa-check-square-o cur-pointer mr-2" title="Pass" (click)="IsTestCasePass(1)"></i>
+        <i class="fa fa-window-close-o cur-pointer mr-2" title="Failed" (click)="IsTestCasePass(2)"></i>
+        <i class="fa fa-save cur-pointer mr-2" title="Save" (click)="EditTestCase()"></i>
+        <i class="fa fa-trash cur-pointer mr-2" title="Delete" (click)="deletetestcasedisplay=true;"></i>
+        <i class="fa cur-pointer fa-close" (click)="CloseRightPanel()" title="Close"></i>
+      </div>
+    </div>
+    <div class="row RS-body" *ngIf="EditTestCaseData!=null">
+      <div class="col-xl-12">
+        <form class="p-3">
+          <div class="row">
+            <div class="col-xl-12">
+              <label class="teamme-color">Title <span class="teamme-color">*</span></label>
+              <mat-form-field class="w-100">
+                <mat-label>Title</mat-label>
+                <input matInput placeholder="Please enter title" [(ngModel)]="EditTestCaseData.Title" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-6">
+              <label class="teamme-color">Description</label>
+              <mat-form-field class="w-100">
+                <mat-label>Description</mat-label>
+                <textarea matInput placeholder="Description" [(ngModel)]="EditTestCaseData.Description" [ngModelOptions]="{standalone: true}"></textarea>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+              <label class="teamme-color">Pre-Condition</label>
+              <mat-form-field class="w-100">
+                <mat-label>Pre-Condition</mat-label>
+                <textarea matInput placeholder="Pre-Condition" [(ngModel)]="EditTestCaseData.PreCondition" [ngModelOptions]="{standalone: true}"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-xl-6">
+              <label class="teamme-color">Expected Result</label>
+              <mat-form-field class="w-100">
+                <mat-label>Expected Result</mat-label>
+                <textarea matInput placeholder="Expected Result" [(ngModel)]="EditTestCaseData.ExpectedResult" [ngModelOptions]="{standalone: true}"></textarea>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+              <label class="teamme-color">Actual Result</label>
+              <mat-form-field class="w-100">
+                <mat-label>Actual Result</mat-label>
+                <textarea matInput placeholder="Actual Result" [(ngModel)]="EditTestCaseData.ActualResult" [ngModelOptions]="{standalone: true}"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label class="teamme-color">Steps</label>
+            </div>
+            <div class="col-10">
+              <mat-form-field class="w-100">
+                <mat-label>Enter Step Details</mat-label>
+                <input matInput placeholder="Enter Step Details" [(ngModel)]="TestCaseStepTitle" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+            <div class="col-2">
+              <button type="submit" class="btn btn-outline-primary" (click)="AddTestCaseStep()">Add</button>
+            </div>
+          </div>
+          <div class="row" *ngIf="EditTestCaseData.TestCaseStep != null">
+            <div class="col-12" style="height:100px; overflow:auto;">
+              <div *ngFor="let step of EditTestCaseData.TestCaseStep">
+                <mat-checkbox color="primary" [(ngModel)]="step.IsChecked" [ngModelOptions]="{standalone:true}"></mat-checkbox>
+                <span>
+                  <mat-form-field class="w-75">
+                    <input matInput [(ngModel)]="step.Description" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                  <i class="fa fa-trash teamme-color cur-pointer" (click)="DeleteTestCaseStep(step)"></i>
+                </span>
+                <!--<hr />-->
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--DELETE BACKLOG-->
+<p-dialog header="DELETE BACKLOG" [(visible)]="deletedisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to delete?</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="deletedisplay=false" class="btn btn-outline-primary">No</button>
+    <button type="button" (click)="DeleteProductBacklog(EditBacklogData.ProductBacklogId)" class="btn btn-outline-primary">Yes</button>
+  </p-footer>
+</p-dialog>
+
+<!--DELETE TASK-->
+<p-dialog header="DELETE TASK" [(visible)]="deletetaskdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to delete?</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="deletetaskdisplay=false" class="btn btn-outline-primary">No</button>
+    <button type="button" (click)="DeleteTask(EditTaskData.ProductBacklogDataId)" class="btn btn-outline-primary">Yes</button>
+  </p-footer>
+</p-dialog>
+
+<!--DELETE BUG-->
+<p-dialog header="DELETE BUG" [(visible)]="deletebugdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to delete?</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="deletebugdisplay=false" class="btn btn-outline-primary">No</button>
+    <button type="button" (click)="DeleteBug(EditBugData.ProductBacklogDataId)" class="btn btn-outline-primary">Yes</button>
+  </p-footer>
+</p-dialog>
+
+<!--DELETE TESTCASE-->
+<p-dialog header="DELETE TEST CASE" [(visible)]="deletetestcasedisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center">Are you sure want to delete?</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="deletetestcasedisplay=false" class="btn btn-outline-primary">No</button>
+    <button type="button" (click)="DeleteTestCase(EditTestCaseData.TestCaseId)" class="btn btn-outline-primary">Yes</button>
+  </p-footer>
+</p-dialog>
+
+<!--DELETE ENHANCEMENT-->
+<p-dialog header="DELETE ENHANCEMENT" [(visible)]="deleteenhancementdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12" *ngIf="ProductBacklogData != null">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to delete?</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="deleteenhancementdisplay=false" class="btn btn-outline-primary">No</button>
+    <button type="button" (click)="DeleteEnhancement(EditEnhancementData.ProductBacklogDataId)" class="btn btn-outline-primary">Yes</button>
+  </p-footer>
+</p-dialog>
+
+
+<p-dialog header="CHANGE TO ENHANCEMENT" [(visible)]="changedisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to move to enhancement.</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="changedisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="TaskToEnhancement(DeleteProductBacklogDataId)" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>
+
+
+<p-dialog header="CHANGE TO ENHANCEMENT" [(visible)]="changebugdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to move to enhancement.</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="changebugdisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="BugToEnhancement(DeleteProductBacklogDataId)" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>

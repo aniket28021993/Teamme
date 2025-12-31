@@ -1,0 +1,14 @@
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\bin\Release\BugTrackerBusiness.exe.config
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\bin\Release\BugTrackerBusiness.exe
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\bin\Release\BugTrackerBusiness.pdb
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\bin\Release\BugTrackerModels.exe
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\bin\Release\BugTrackerRepository.exe
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\bin\Release\BugTrackerModels.pdb
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\bin\Release\BugTrackerModels.exe.config
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\bin\Release\BugTrackerRepository.pdb
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\bin\Release\BugTrackerRepository.exe.config
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\obj\Release\BugTrackerBusiness.csprojResolveAssemblyReference.cache
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\obj\Release\BugTrackerBusiness.csproj.CoreCompileInputs.cache
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\obj\Release\BugTrackerBusiness.csproj.CopyComplete
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\obj\Release\BugTrackerBusiness.exe
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerBusiness\obj\Release\BugTrackerBusiness.pdb

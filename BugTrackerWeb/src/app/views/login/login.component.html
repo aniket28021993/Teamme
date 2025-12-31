@@ -1,0 +1,53 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="app-body teamme-bg-color">
+  <main class="main d-flex align-items-center">
+    <div class="container">
+      <div class="d-flex justify-content-center">
+        <div class="user_card">
+          <div class="d-flex justify-content-center">
+            <div class="brand_logo_container">
+              <div class="brand_logo">
+                <p class="text-white login-logo">TeamME</p>
+              </div>
+            </div>
+          </div>
+          <div class="form_container p-5">
+            <form class="form-custom">
+              <div class="mb-3">
+                <div class="input-group">
+                  <input type="text" [(ngModel)]="_Email" [ngModelOptions]="{standalone: true}" placeholder="Email" class="form-control">
+                </div>
+                <div class="text-left mt-1">
+                  <span class="text-danger" *ngIf="ErrEmail != undefined && ErrEmail != ''">{{ErrEmail}}</span>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <input type="password" [(ngModel)]="_Password" [ngModelOptions]="{standalone: true}" placeholder="Password" class="form-control">
+                </div>
+                <div class="text-left mt-1">
+                  <span class="text-danger" *ngIf="ErrPassword != undefined && ErrPassword != ''">{{ErrPassword}}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <button type="submit" class="btn btn-danger px-4 btn-login btn-block" (click)="UserLogin()">Sign In</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="mt-4">
+            <div class="d-flex justify-content-center links">
+              Don't have an account? <a [routerLink]="['/register']" title="Sign Up!" class="ml-2">Sign Up!</a>
+            </div>
+            <div class="d-flex justify-content-center links pb-5">
+              <a class="text-danger" [routerLink]="['/forgotpassword']">Forgot your password?</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

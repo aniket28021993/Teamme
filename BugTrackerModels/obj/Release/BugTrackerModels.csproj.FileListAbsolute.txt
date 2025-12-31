@@ -1,0 +1,7 @@
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\bin\Release\BugTrackerModels.exe.config
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\bin\Release\BugTrackerModels.exe
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\bin\Release\BugTrackerModels.pdb
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\obj\Release\BugTrackerModels.csprojResolveAssemblyReference.cache
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\obj\Release\BugTrackerModels.csproj.CoreCompileInputs.cache
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\obj\Release\BugTrackerModels.exe
+C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\obj\Release\BugTrackerModels.pdb

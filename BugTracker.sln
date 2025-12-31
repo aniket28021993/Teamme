@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugtrackerController", "BugtrackerController\BugtrackerController.csproj", "{8377D5B0-F8EA-4E9A-A726-8974544EA22D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTrackerBusiness", "BugTrackerBusiness\BugTrackerBusiness.csproj", "{22E8F486-D8B6-44FB-86EB-E129A30B9426}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTrackerModels", "BugTrackerModels\BugTrackerModels.csproj", "{03A5B50B-4DE5-4F1B-B12B-3E8E4022DD7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTrackerRepository", "BugTrackerRepository\BugTrackerRepository.csproj", "{5D417A57-D627-4B51-99DD-7A9385F6E7EC}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BugTrackerWeb", "BugTrackerWeb", "{493A485C-774C-4324-8808-3DF45F195877}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_64784"
+		Debug.AspNetCompiler.PhysicalPath = "BugTrackerWeb\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64784\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_64784"
+		Release.AspNetCompiler.PhysicalPath = "BugTrackerWeb\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64784\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "64784"
+		SlnRelativePath = "BugTrackerWeb\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8377D5B0-F8EA-4E9A-A726-8974544EA22D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8377D5B0-F8EA-4E9A-A726-8974544EA22D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8377D5B0-F8EA-4E9A-A726-8974544EA22D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8377D5B0-F8EA-4E9A-A726-8974544EA22D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22E8F486-D8B6-44FB-86EB-E129A30B9426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22E8F486-D8B6-44FB-86EB-E129A30B9426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22E8F486-D8B6-44FB-86EB-E129A30B9426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22E8F486-D8B6-44FB-86EB-E129A30B9426}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03A5B50B-4DE5-4F1B-B12B-3E8E4022DD7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03A5B50B-4DE5-4F1B-B12B-3E8E4022DD7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03A5B50B-4DE5-4F1B-B12B-3E8E4022DD7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03A5B50B-4DE5-4F1B-B12B-3E8E4022DD7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D417A57-D627-4B51-99DD-7A9385F6E7EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D417A57-D627-4B51-99DD-7A9385F6E7EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D417A57-D627-4B51-99DD-7A9385F6E7EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D417A57-D627-4B51-99DD-7A9385F6E7EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{493A485C-774C-4324-8808-3DF45F195877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{493A485C-774C-4324-8808-3DF45F195877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{493A485C-774C-4324-8808-3DF45F195877}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{493A485C-774C-4324-8808-3DF45F195877}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6CF25F63-D1E7-4916-A61E-7DB528996DF5}
+	EndGlobalSection
+EndGlobal

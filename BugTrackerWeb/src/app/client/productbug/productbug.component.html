@@ -1,0 +1,113 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row page-menu">
+  <div class="col-12 table-custom" #epltable>
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-6">
+            <button type="button" class="btn btn-outline-primary m-1" (click)="GotoCreateBug()" [hidden]="ProductBacklogobj.length==0">CREATE BUG</button>
+            <button type="button" class="btn btn-outline-primary m-1" (click)="exportToExcel()" [hidden]="DataBugLength == 0">EXPORT TO EXCEL</button>
+          </div>
+          <div class="col-md-3">
+            <input type="text" class="form-control m-1" [(ngModel)]="SearchTaskval" (ngModelChange)="OnKeyPress()" placeholder="Search bug">
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="mat-dropdown">
+              <mat-label>Select Backlog</mat-label>
+              <mat-select [(ngModel)]="ProductBacklogId" [ngModelOptions]="{standalone: true}" (selectionChange)="GetAllProductBug();BacklogEvents();" [disabled]="ProductBacklogobj.length==0">
+                <mat-option *ngFor="let ProductBacklog of ProductBacklogobj" [value]="ProductBacklog.ProductBacklogId">
+                  {{ProductBacklog.Title}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" [hidden]="DataBugLength == 0">
+        <table mat-table [dataSource]="DataBug" matSort class="mat-elevation-z8 shadow-lg">
+          <ng-container matColumnDef="BugId">
+            <th scope="col" mat-header-cell *matHeaderCellDef>ID</th>
+            <td data-label="ID" mat-cell *matCellDef="let element"> {{element.ProductBacklogDataId}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="BugTitle">
+            <th scope="col" mat-header-cell *matHeaderCellDef>TITLE </th>
+            <td data-label="TITLE" mat-cell *matCellDef="let element">
+              <button type="button" class="btn btn-link p-0 d-inline-block text-truncate" style="max-width: 100px;" title="{{element.Title}}" (click)="GotoEditBug(element.ProductBacklogDataId)">{{element.Title}}</button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="BugState">
+            <th scope="col" mat-header-cell *matHeaderCellDef>STATE </th>
+            <td data-label="STATE" mat-cell *matCellDef="let element"> {{element.StateName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Priority">
+            <th scope="col" mat-header-cell *matHeaderCellDef>PRIORITY </th>
+            <td data-label="PRIORITY" mat-cell *matCellDef="let element"> {{element.PriorityName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="BugAssignedTo">
+            <th scope="col" mat-header-cell *matHeaderCellDef>ASSIGNED</th>
+            <td data-label="ASSIGNED" mat-cell *matCellDef="let element"> {{element.UserName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Change">
+            <th scope="col" mat-header-cell *matHeaderCellDef> MOVE TO</th>
+            <td data-label="MOVE TO" mat-cell *matCellDef="let element">
+              <button type="button" class="btn btn-link" (click)="ProductBacklogData = element;changedisplay=true;">ENHANCEMENT</button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Delete">
+            <th scope="col" mat-header-cell *matHeaderCellDef>DELETE</th>
+            <td data-label="DELETE" mat-cell *matCellDef="let element">
+              <i class="fa fa-trash text-danger cur-pointer" (click)="ProductBacklogData = element;deletedisplay=true;"></i>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons (page)="pageEvents($event)"></mat-paginator>
+      </div>
+      <div class="card-body" [hidden]="DataBugLength != 0">
+        <div class="row">
+          <div class="col-12 text-center">
+            <img class="img-fluid px-xl-4 mt-xxl-n5" src="../../../assets/img/norecord.gif" height="350" width="350">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+<p-dialog header="DELETE BUG" [(visible)]="deletedisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12" *ngIf="ProductBacklogData != null">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to delete?</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="deletedisplay=false" class="btn btn-outline-primary">No</button>
+    <button type="button" (click)="DeleteBug(ProductBacklogData.ProductBacklogDataId)" [disabled]="FormDisabled" class="btn btn-outline-primary">Yes</button>
+  </p-footer>
+</p-dialog>
+
+
+<p-dialog header="CHANGE TO ENHANCEMENT" [(visible)]="changedisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12" *ngIf="ProductBacklogData != null">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to move to enhancement.</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="changedisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="BugToEnhancement(ProductBacklogData.ProductBacklogDataId)" [disabled]="FormDisabled" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>

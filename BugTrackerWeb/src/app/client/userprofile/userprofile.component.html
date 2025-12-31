@@ -1,0 +1,95 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card shadow-lg">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-3 text-center">
+            <a *ngIf="UserIamge == undefined">
+              <img src="assets/img/avatars/6.jpg" class="img-avatar " alt="..." height="150" width="150">
+              <!--rounded-circle border p-1-->
+
+            </a>
+            <a *ngIf="UserIamge != undefined">
+              <img src="{{UserIamge}}" class="rounded-circle border p-1" alt="..." height="150" width="150">
+            </a>
+            <div class="custom-file mt-3 mb-3">
+              <input class="file-input-custom" type="file" id="videocontrol" accept="image/*" (change)="onBasicUpload($event)">
+              <label for="videocontrol">choose a file</label>
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <form class="form form-custom" novalidate="">
+              <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                      <div class="form-group">
+                        <label>First Name</label>
+                        <input class="form-control" type="text" name="firstname" [(ngModel)]="OrguserData.FirstName" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                        <div class="text-left mt-1">
+                          <span class="text-danger" *ngIf="ErrFirstName != undefined || ErrFirstName != ''">{{ErrFirstName}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                      <div class="form-group">
+                        <label>Last Name</label>
+                        <input class="form-control" type="text" name="lastname" [(ngModel)]="OrguserData.LastName" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                        <div class="text-left mt-1">
+                          <span class="text-danger" *ngIf="ErrLastName != undefined || ErrLastName != ''">{{ErrLastName}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                      <div class="form-group">
+                        <label>Email</label>
+                        <input class="form-control" type="text" name="emailid" [(ngModel)]="OrguserData.EmailId" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                        <div class="text-left mt-1">
+                          <span class="text-danger" *ngIf="ErrEmailId != undefined || ErrEmailId != ''">{{PopUpErroMessage}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                      <div class="form-group">
+                        <label>Phone Number</label>
+                        <input class="form-control" type="text" name="phoneno" [(ngModel)]="OrguserData.PhoneNo" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                        <div class="text-left mt-1">
+                          <span class="text-danger" *ngIf="ErrPhoneNo != undefined || ErrPhoneNo != ''">{{ErrPhoneNo}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                      <div class="form-group">
+                        <label>User Status</label>
+                        <input class="form-control" type="text" name="status" placeholder="Active" disabled>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                      <div class="form-group">
+                        <label>User Type</label>
+                        <input *ngIf="OrguserData.OrgUserTypeId == 1" class="form-control" type="text" name="usertype" placeholder="SUPER ADMIN" disabled>
+                        <input *ngIf="OrguserData.OrgUserTypeId == 2" class="form-control" type="text" name="usertype" placeholder="ADMIN" disabled>
+                        <input *ngIf="OrguserData.OrgUserTypeId == 3" class="form-control" type="text" name="usertype" placeholder="MANAGER" disabled>
+                        <input *ngIf="OrguserData.OrgUserTypeId == 4" class="form-control" type="text" name="usertype" placeholder="TEAM LEAD" disabled>
+                        <input *ngIf="OrguserData.OrgUserTypeId == 5" class="form-control" type="text" name="usertype" placeholder="TEAM MEMBER" disabled>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12">
+                      <div class="form-group">
+                        <label>About</label>
+                        <textarea class="form-control" rows="5" placeholder="My Bio" [(ngModel)]="BioData" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled"></textarea>
+                      </div>
+                    </div>
+              </div>
+              <div class="row page-menu">
+                <div class="col-12 text-right">
+                  <button class="btn btn-outline-primary" type="submit" (click)="EditUser()" [disabled]="FormDisabled">Save Changes</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

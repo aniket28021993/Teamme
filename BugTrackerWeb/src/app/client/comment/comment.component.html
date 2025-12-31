@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row page-menu">
+      <div class="col-12">
+        <textarea placeholder="write a comment..." rows="3" [(ngModel)]="Description" [mention]="items" style="width:100%"></textarea>
+      </div>
+      <div class="col-12 text-right mt-2">
+        <button class="btn btn-outline-primary" type="submit" (click)="CreateComment()">Post</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <ul class="media-list p-0">
+          <li class="media" *ngFor="let comment of CommentList">
+            <div class="media-body">
+              <div style="display:inline-block;" class="text-center rounded-circle user-filter border-1-teamme">
+                <div class="rounded-circle shadow-lg text-uppercase cur-pointer text-center teamme-color" style="height:20px; width:20px; display:inline-block"><span style="font-size:10px;">{{comment.OwnerInitial}}</span></div>
+              </div>
+              <span class="text-muted pull-right">
+                <small class="text-muted">{{comment.CreatedOn | date}}</small>
+              </span>
+              <strong class="text-success">{{comment.UserName}}</strong>
+              <p class="ml-4">
+                {{comment.Description}}
+              </p>
+              <hr>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

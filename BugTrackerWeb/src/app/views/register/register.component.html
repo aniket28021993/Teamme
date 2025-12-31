@@ -1,0 +1,441 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+<div class="landing-page">
+  <nav class="navbar navbar-expand-lg mb-0 d-none d-sm-block">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      <i class="fa fa-bug text-white"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+          <p class="text-white nav-logo">TeamME</p>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-uppercase" (click)="moveToAbout()">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-uppercase" (click)="moveToPricing()">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-uppercase" (click)="moveToContact()">Contact Us</a>
+        </li>
+        <!--<li class="nav-item">
+          <a class="nav-link text-uppercase" (click)="moveToTour()">TeamME Tour</a>
+        </li>-->
+      </ul>
+      <button class="btn btn-danger my-2 my-sm-0 text-uppercase" [routerLink]="['/login']" type="submit">Login</button>
+    </div>
+  </nav>
+  <main>
+    <div class="container-fluid">
+      <div class="row teamme-bg-color d-block d-sm-none">
+        <div class="col-12 text-right">
+          <button class="btn btn-danger text-uppercase m-2" [routerLink]="['/login']" type="submit">Login</button>
+        </div>
+      </div>
+      <div #Home class="row register-card justify-content-end mr-5">
+        <div class="col-lg-6 text-center">
+          <div class="teamme-color main-logo mt-5">TeamME</div>
+          <p class="teamme-color text-uppercase mt-5">
+            Coming together is the beginning. Staying together is progress. Working together is success.
+          </p>
+          <img src="../../../assets/img/Mockup-inspiration-life-photo-image-phone-iphone-PixTeller.png" class="img-fluid mb-1" />
+        </div>
+        <div class="col-lg-2 left-card col-xs-12 text-center">
+          <h1 class="text-white text-uppercase">
+            Registration
+          </h1>
+          <p class="text-white text-uppercase">
+            manage your team performance by enrolling with us..!!
+          </p>
+          <i class="fa fa-users fa-5x text-white"></i>
+        </div>
+        <div class="col-lg-4 col-xs-12 right-card">
+          <form class="form-custom">
+            <div class="mb-3">
+              <div class="input-group">
+                <input type="text" [(ngModel)]="_OrgName" [ngModelOptions]="{standalone: true}" placeholder="Organization Name" class="form-control" [disabled]="FormDisabled">
+              </div>
+              <div class="text-left mt-1">
+                <span class="text-danger" *ngIf="ErrOrgName != undefined && ErrOrgName != ''">{{ErrOrgName}}</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="input-group">
+                <input type="email" [(ngModel)]="_OrgEmail" [ngModelOptions]="{standalone: true}" placeholder="Email Address" class="form-control" [disabled]="FormDisabled">
+              </div>
+              <div class="text-left mt-1">
+                <span class="text-danger" *ngIf="ErrEmailId != undefined && ErrEmailId != ''">{{ErrEmailId}}</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="input-group">
+                <input type="text" [(ngModel)]="_OrgNumber" [ngModelOptions]="{standalone: true}" placeholder="Phone Number" class="form-control" [disabled]="FormDisabled">
+              </div>
+              <div class="text-left mt-1">
+                <span class="text-danger" *ngIf="ErrPhoneNo != undefined && ErrPhoneNo != ''">{{ErrPhoneNo}}</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="input-group">
+                <input type="text" [(ngModel)]="_OrgAddress" [ngModelOptions]="{standalone: true}" placeholder="Address" class="form-control" [disabled]="FormDisabled">
+              </div>
+              <div class="text-left mt-1">
+                <span class="text-danger" *ngIf="ErrAddress != undefined && ErrAddress != ''">{{ErrAddress}}</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <mat-form-field class="mat-dropdown">
+                <mat-select [(ngModel)]="OrgPlanId" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let plan of OrgPlanArr" [value]="plan.id">
+                    {{plan.text}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!--<div class="mb-3">
+              <mat-checkbox color="primary" [(ngModel)]="IsChecked" [ngModelOptions]="{standalone:true}"></mat-checkbox>
+              <span>
+                I have read and accept the <a href="{{TermOfService}}" target="_blank">Terms of service</a> & <a href="{{PrivacyPolicy}}" target="_blank">Privacy policy</a>
+              </span>
+            </div>-->
+            <button class="btn btn-danger my-2 my-sm-0 text-uppercase btn-block" type="button" (click)="CreateOrganization()" [disabled]="FormDisabled">Register</button>
+          </form>
+        </div>
+      </div>
+      <div #About class="row aboutus text-white">
+        <div class="col-12 text-center">
+          <h1>ABOUT TEAMME</h1>
+          <p>Teamme is team management tool where you can set clear goals and remove obstacles towards success..!!</p>
+          <p>We have following features:</p>
+          <div class="row">
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">Project</h3>
+                  <p class="card-text">You can create multiple projects for better team management where you can perform activities like User Managerment, Bug Tracking and many more.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">User</h3>
+                  <p class="card-text">You can create account of employees where anyone under the project can track their performance.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">Dashboard</h3>
+                  <p class="card-text">
+                    We provide overall analytics using different types of charts where you will get to see the systematic analysis of data or statistics.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">Phase</h3>
+                  <p class="card-text">We have Phase management where you can manage versions/sprints of your projects.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">Backlog</h3>
+                  <p class="card-text">We provide Backlog system where you can log requirements with format of text, images and video's.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">Srumboard</h3>
+                  <p class="card-text">You can do all things at one place i.e create,edit,delete of Backlog,Task,ENhancement,Bug and TestCase.</p>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">Task</h3>
+                  <p class="card-text">You can create Task against backlog where you can estimate the work of current phase</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">Bug</h3>
+                  <p class="card-text">You can log and track the bug against backlog with states like New, Active, Reopen, Done and many more.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">Test Case</h3>
+                  <p class="card-text">You can write test scenarios according to the requirement captured against backlog and execute the Test Cases.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div #Pricing class="row pricing text-center">
+        <div class="col-lg-12 col-xs-12">
+          <h1 class="text-uppercase">Pricing</h1>
+          <div class="row">
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold text-muted">Free</h3>
+                  <h1 class="text-muted"><i class="fa fa-inr"></i> 0<span class="text-muted small">/FOREVER</span></h1>
+                  <hr />
+                  <div class="text-left">
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <strong class="text-muted"> 10 Users</strong>
+                    <br />
+                    <i class="fa fa-close text-danger"></i>
+                    &nbsp;
+                    <span> Bulk Upload</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Dashboard</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Project</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Phase</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Backlog</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Taks</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Enhancement</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Bug</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Test Case</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Event</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-outline-dark my-2 my-sm-0 text-uppercase btn-block" type="button" (click)="moveToHome(1)" [disabled]="FormDisabled">TRY NOW</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold">PLUS</h3>
+                  <h1><i class="fa fa-inr"></i> 10,000<span class="text-muted small">/month</span></h1>
+                  <hr />
+                  <div class="text-left">
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <strong> 30 Users</strong>
+                    <br />
+                    <i class="fa fa-close text-danger"></i>
+                    &nbsp;
+                    <span> Bulk Upload</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Dashboard</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Project</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Phase</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Backlog</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Taks</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Enhancement</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Bug</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Test Case</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Event</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-dark my-2 my-sm-0 text-uppercase btn-block" type="button" (click)="moveToHome(2)" [disabled]="FormDisabled">BUY NOW</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                  <h3 class="card-title text-uppercase font-weight-bold teamme-color">PRO</h3>
+                  <h1 class="teamme-color"><i class="fa fa-inr"></i> 20,000<span class="text-muted small">/month</span></h1>
+                  <hr />
+                  <div class="text-left">
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <strong class="teamme-color"> Unlimited Users</strong>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span class="teamme-color"> Bulk Upload</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Dashboard</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Project</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Phase</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Backlog</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Taks</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Enhancement</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Bug</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Test Case</span>
+                    <br />
+                    <i class="fa fa-check text-success"></i>
+                    &nbsp;
+                    <span> Event</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-danger my-2 my-sm-0 text-uppercase btn-block" type="button" (click)="moveToHome(3)" [disabled]="FormDisabled">BUY NOW</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<div #Tour class="row m-xl-5">
+        <div class="col-12 text-center">
+          <h1 class="text-uppercase">TeamME Tour</h1>
+        </div>
+        <div class="col-xl-6 p-3">
+          <div class="p-3 border-1-teamme shadow-lg">
+            <video width="100%" height="100%" controls>
+              <source src="{{VideoUrlReg}}" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="col-xl-6 p-3">
+          <div class="p-3 border-1-teamme shadow-lg">
+            <video width="100%" height="100%" controls>
+              <source src="{{VideoUrlProj}}" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="col-xl-6 p-3">
+          <div class="p-3 border-1-teamme shadow-lg">
+            <video width="100%" height="100%" controls>
+              <source src="{{VideoUrlDash}}" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="col-xl-6 p-3">
+          <div class="p-3 border-1-teamme shadow-lg">
+            <video width="100%" height="100%" controls>
+              <source src="{{VideoUrlStat}}" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>-->
+      <div #Contact class="row p-5 justify-content-center text-center teamme-bg-color contactus">
+        <div class="col-lg-6 col-xs-12">
+          <div class="card mb-0">
+            <div class="card-body">
+              <h1 class="text-uppercase">Contact Us</h1>
+              <form class="form-custom">
+                <div class="mb-3">
+                  <div class="input-group">
+                    <input type="text" [(ngModel)]="ContactName" [ngModelOptions]="{standalone: true}" placeholder="Name" class="form-control" [disabled]="FormDisabled">
+                  </div>
+                  <div class="text-left mt-1">
+                    <span class="text-danger" *ngIf="ErrContactName != undefined && ErrContactName != ''">{{ErrContactName}}</span>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="input-group">
+                    <input type="email" [(ngModel)]="ContactEmail" [ngModelOptions]="{standalone: true}" placeholder="Email Address" class="form-control" [disabled]="FormDisabled">
+                  </div>
+                  <div class="text-left mt-1">
+                    <span class="text-danger" *ngIf="ErrContactEmail != undefined && ErrContactEmail != ''">{{ErrContactEmail}}</span>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="input-group">
+                    <textarea id="textarea-input" name="textarea-input" rows="9" [(ngModel)]="ContactMessage" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Message" [disabled]="FormDisabled"></textarea>
+                  </div>
+                </div>
+                <button class="btn btn-danger my-2 my-sm-0 text-uppercase btn-block" type="button" (click)="ContactUs()" [disabled]="FormDisabled">Contact Us</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

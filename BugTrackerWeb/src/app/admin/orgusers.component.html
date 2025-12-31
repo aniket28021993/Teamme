@@ -1,0 +1,81 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <button type="button" class="btn btn-outline-primary" [routerLink]="['/admin-dashboard']">BACK</button>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+
+<div class="row page-menu">
+  <div class="col-lg-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-4">
+            <input type="text" class="form-control" [(ngModel)]="SearchTaskval" (ngModelChange)="OnKeyPress()" placeholder="Search User">
+          </div>
+        </div>
+      </div>
+      <div class="card-body table-custom" [hidden]="UsersLength == 0">
+        <table mat-table [dataSource]="Users" matSort class="mat-elevation-z8">
+          <ng-container matColumnDef="FirstName">
+            <th scope="col" mat-header-cell *matHeaderCellDef> FIRSTNAME</th>
+            <td data-label="FIRSTNAME" mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="LastName">
+            <th scope="col" mat-header-cell *matHeaderCellDef> LASTNAME </th>
+            <td data-label="LASTNAME" mat-cell *matCellDef="let element"> {{element.LastName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="EmailId">
+            <th scope="col" mat-header-cell *matHeaderCellDef> EMAILID </th>
+            <td data-label="EMAILID" mat-cell *matCellDef="let element"> {{element.EmailId}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="PhoneNo">
+            <th scope="col" mat-header-cell *matHeaderCellDef> PHONENO</th>
+            <td data-label="PHONENO" mat-cell *matCellDef="let element"> {{element.PhoneNo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="UserType">
+            <th scope="col" mat-header-cell *matHeaderCellDef>USERTYPE</th>
+            <td data-label="USERTYPE" mat-cell *matCellDef="let element">
+              <span *ngIf="element.OrgUserTypeId==2">Admin</span>
+              <span *ngIf="element.OrgUserTypeId==3">Manager</span>
+              <span *ngIf="element.OrgUserTypeId==4">Team Lead</span>
+              <span *ngIf="element.OrgUserTypeId==5">Team Member</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Status">
+            <th scope="col" mat-header-cell *matHeaderCellDef>STATUS</th>
+            <td data-label="STATUS" mat-cell *matCellDef="let element">
+              <div>
+                <span *ngIf="element.OrgUserStatusId ==1">CREATED</span>
+                <span *ngIf="element.OrgUserStatusId ==2">ACTIVE</span>
+                <span *ngIf="element.OrgUserStatusId ==3">PASUSED</span>
+                <span *ngIf="element.OrgUserStatusId ==4">SUSPENDED</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+      <div class="card-body" [hidden]="UsersLength != 0">
+        <h4 class="text-danger text-center">NO RECORD FOUND</h4>
+      </div>
+    </div>
+  </div>
+  <!--/.col-->
+</div>
+
+

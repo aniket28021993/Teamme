@@ -1,0 +1,91 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card shadow-lg">
+      <div class="card-body" *ngIf="TestCaseData != null">
+        <form class="p-3">
+          <div class="row">
+            <div class="col-xl-12">
+              <label class="teamme-color">Title <span class="teamme-color">*</span></label>
+              <mat-form-field class="w-100">
+                <mat-label>Title</mat-label>
+                <input matInput placeholder="Please enter title" [(ngModel)]="TestCaseData.Title" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+              <div class="text-left mt-1">
+                <span class="text-danger" *ngIf="ErrorMsgTitle != undefined || ErrorMsgTitle != ''">{{ErrorMsgTitle}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-6">
+              <label class="teamme-color">Description</label>
+              <mat-form-field class="w-100">
+                <mat-label>Description</mat-label>
+                <textarea matInput placeholder="Description" [(ngModel)]="TestCaseData.Description" [ngModelOptions]="{standalone: true}"></textarea>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+              <label class="teamme-color">Pre-Condition</label>
+              <mat-form-field class="w-100">
+                <mat-label>Pre-Condition</mat-label>
+                <textarea matInput placeholder="Pre-Condition" [(ngModel)]="TestCaseData.PreCondition" [ngModelOptions]="{standalone: true}"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-xl-6">
+              <label class="teamme-color">Expected Result</label>
+              <mat-form-field class="w-100">
+                <mat-label>Expected Result</mat-label>
+                <textarea matInput placeholder="Expected Result" [(ngModel)]="TestCaseData.ExpectedResult" [ngModelOptions]="{standalone: true}"></textarea>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+              <label class="teamme-color">Actual Result</label>
+              <mat-form-field class="w-100">
+                <mat-label>Actual Result</mat-label>
+                <textarea matInput placeholder="Actual Result" [(ngModel)]="TestCaseData.ActualResult" [ngModelOptions]="{standalone: true}"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label class="teamme-color">Steps</label>
+            </div>
+            <div class="col-11">
+              <mat-form-field class="w-100">
+                <mat-label>Enter Step Details</mat-label>
+                <input matInput placeholder="Enter Step Details" [(ngModel)]="TestCaseStepTitle" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+            <div class="col-1">
+              <button type="submit" class="btn btn-outline-primary" (click)="AddTestCaseStep()">Add</button>
+            </div>
+          </div>
+          <div class="row" *ngIf="TestCaseData.TestCaseStep != null">
+            <div class="col-12" style="height:100px; overflow:auto;">
+              <div *ngFor="let step of TestCaseData.TestCaseStep">
+                <mat-checkbox color="primary" [(ngModel)]="step.IsChecked" [ngModelOptions]="{standalone:true}"></mat-checkbox>
+                <mat-form-field class="w-75">
+                  <input matInput [(ngModel)]="step.Description" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+                <i class="fa fa-trash teamme-color cur-pointer" (click)="DeleteTestCaseStep(step)"></i>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="card-footer">
+        <div class="row page-menu">
+          <div class="col-12 text-right">
+            <button type="button" class="btn btn-outline-primary" (click)="IsTestCasePass(1)">Pass</button>
+            <button type="button" class="btn btn-outline-primary" (click)="IsTestCasePass(2)">Failed</button>
+            <button type="button" class="btn btn-outline-primary" (click)="EditTestCase()" [disabled]="FormDisabled">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

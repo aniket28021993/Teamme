@@ -1,0 +1,232 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row page-menu">
+  <div class="col-lg-12 col-xs-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-4" *ngIf="OrgUserTypeId != 5">
+            <button type="button" class="btn btn-outline-primary m-1" (click)="CleanError();createdisplay=true;">CREATE USER</button>
+            <button type="button" class="btn btn-outline-primary m-1" (click)="createbulkdisplay=true;" *ngIf="OrgPlanId == 3">BULK UPLOAD</button>
+          </div>
+            <div class="col-md-4 m-1">
+              <input type="text" class="form-control" [(ngModel)]="SearchTaskval" (ngModelChange)="OnKeyPress()" placeholder="Search user">
+            </div>
+          </div>
+      </div>
+      <div class="card-body table-custom" style="overflow:auto" [hidden]="UsersLength == 0">
+        <table mat-table [dataSource]="Users" matSort class="mat-elevation-z8">
+          <ng-container matColumnDef="FirstName">
+            <th scope="col" mat-header-cell *matHeaderCellDef> FIRSTNAME</th>
+            <td data-label="FIRSTNAME" mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="LastName">
+            <th scope="col" mat-header-cell *matHeaderCellDef> LASTNAME </th>
+            <td data-label="LASTNAME" mat-cell *matCellDef="let element"> {{element.LastName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="EmailId">
+            <th scope="col" mat-header-cell *matHeaderCellDef> EMAILID </th>
+            <td data-label="EMAILID" mat-cell *matCellDef="let element"> {{element.EmailId}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="PhoneNo">
+            <th scope="col" mat-header-cell *matHeaderCellDef> PHONE NUMBER</th>
+            <td data-label="PHONENO" mat-cell *matCellDef="let element"> {{element.PhoneNo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="UserType">
+            <th scope="col" mat-header-cell *matHeaderCellDef>USERTYPE</th>
+            <td data-label="USERTYPE" mat-cell *matCellDef="let element">
+              <span *ngIf="element.OrgUserTypeId==2">Admin</span>
+              <span *ngIf="element.OrgUserTypeId==3">Manager</span>
+              <span *ngIf="element.OrgUserTypeId==4">Team Lead</span>
+              <span *ngIf="element.OrgUserTypeId==5">Team Member</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Status">
+            <th scope="col" mat-header-cell *matHeaderCellDef>STATUS</th>
+            <td data-label="STATUS" mat-cell *matCellDef="let element">
+              <mat-form-field *ngIf="OrgUserTypeId != 5 && OrgUserId != element.OrgUserId">
+                <mat-select [(ngModel)]="element.OrgUserStatusId" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeUserStatus(element)">
+                  <mat-option *ngFor="let TaskArr of TaskStateArr" [value]="TaskArr.id">
+                    {{TaskArr.title}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="OrgUserTypeId == 5 || OrgUserId == element.OrgUserId">
+                <span *ngIf="element.OrgUserStatusId ==1">CREATED</span>
+                <span *ngIf="element.OrgUserStatusId ==2">ACTIVE</span>
+                <span *ngIf="element.OrgUserStatusId ==3">PASUSED</span>
+                <span *ngIf="element.OrgUserStatusId ==4">SUSPENDED</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Edit">
+            <th scope="col" mat-header-cell *matHeaderCellDef>EDIT</th>
+            <td data-label="EDIT" mat-cell *matCellDef="let element">
+              <i class="fa fa-edit text-primary" (click)="BindEditUser(element)"></i>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+      <div class="card-body" [hidden]="UsersLength != 0">
+        <h4 class="text-danger text-center">NO RECORD FOUND</h4>
+      </div>
+    </div>
+  </div>
+  <!--/.col-->
+</div>
+
+<!--UPDATE ORG STATUS-->
+<p-dialog header="CREATE USER" [(visible)]="createdisplay" [modal]="true" [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12" *ngIf="IsFreePlan == false && IsPluslan == false">
+      <form class="form-custom">
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="text" [(ngModel)]="FirstName" [ngModelOptions]="{standalone: true}" placeholder="First Name" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrFirstName != undefined && ErrFirstName != ''">{{ErrFirstName}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="text" [(ngModel)]="LastName" [ngModelOptions]="{standalone: true}" placeholder="Last Name" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrLastName != undefined && ErrLastName != ''">{{ErrLastName}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="email" [(ngModel)]="EmailId" [ngModelOptions]="{standalone: true}" placeholder="Email Address" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrEmailId != undefined && ErrEmailId != ''">{{ErrEmailId}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="text" [(ngModel)]="PhoneNo" [ngModelOptions]="{standalone: true}" placeholder="Phone Number" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrPhoneNo != undefined && ErrPhoneNo != ''">{{ErrPhoneNo}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+            <mat-form-field class="mat-dropdown">
+              <mat-select [(ngModel)]="UserTypeId" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                <mat-option *ngFor="let UserType of UserTypes" [value]="UserType.id">
+                  {{UserType.Desc}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+
+      </form>
+    </div>
+    <div class="col-md-12" *ngIf="IsFreePlan == true">
+      <h3 class="text-center pt-5 pb-5">You have reached your maximum limit of 10 Users.</h3>
+    </div>
+    <div class="col-md-12" *ngIf="IsPluslan == true">
+      <h3 class="text-center pt-5 pb-5">You have reached your maximum limit of 30 Users.</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="createdisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="CreateUser()" [disabled]="FormDisabled" class="btn btn-outline-primary" *ngIf="IsFreePlan == false && IsPluslan == false">Save</button>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="BULK UPLOAD" [(visible)]="createbulkdisplay" [modal]="true" [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="teamme-color">
+        <label>File (csv) :</label> 
+        <input class="file-input-custom" type="file" id="filecontrol" accept=".csv" (change)="onFileChange($event)" [disabled]="FormDisabled">
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <!--<a class="material-icons" href="{{Url}}">
+    get_app
+  </a>-->
+    <button type="button" (click)="createbulkdisplay=false" class="btn btn-outline-primary">Close</button>
+    <a href="{{Url}}" class="teamme-color">Sample File &nbsp; <i class="fa fa-download"></i></a>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="EDIT USER" [(visible)]="editdisplay" [modal]="true" [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="form-custom" *ngIf="UserEdit != null">
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="text" [(ngModel)]="UserEdit.FirstName" [ngModelOptions]="{standalone: true}" placeholder="First Name" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrFirstName != undefined && ErrFirstName != ''">{{ErrFirstName}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="text" [(ngModel)]="UserEdit.LastName" [ngModelOptions]="{standalone: true}" placeholder="Last Name" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrLastName != undefined && ErrLastName != ''">{{ErrLastName}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="email" [(ngModel)]="UserEdit.EmailId" [ngModelOptions]="{standalone: true}" placeholder="Email Address" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrEmailId != undefined && ErrEmailId != ''">{{ErrEmailId}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="text" [(ngModel)]="UserEdit.PhoneNo" [ngModelOptions]="{standalone: true}" placeholder="Phone Number" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrPhoneNo != undefined && ErrPhoneNo != ''">{{ErrPhoneNo}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <mat-form-field class="mat-dropdown">
+            <mat-select [(ngModel)]="UserEdit.OrgUserTypeId" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+              <mat-option *ngFor="let UserType of UserTypes" [value]="UserType.id">
+                {{UserType.Desc}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </form>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="editdisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="EditUser()" [disabled]="FormDisabled" class="btn btn-outline-primary" *ngIf="IsFreePlan == false && IsPluslan == false">Save</button>
+  </p-footer>
+</p-dialog>
+
+
+

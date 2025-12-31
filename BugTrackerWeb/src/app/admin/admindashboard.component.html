@@ -1,0 +1,161 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card shadow-lg">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> ORGANIZATIONS
+        </div>
+
+        <div class="card-body table-custom" [hidden]="OrganizationLength == 0">
+          <table mat-table [dataSource]="Organization" matSort class="mat-elevation-z8">
+            <ng-container matColumnDef="OrganizationName">
+              <th scope="col" mat-header-cell *matHeaderCellDef> ORGANIZATION NAME</th>
+              <td data-label="ORG NAME" mat-cell *matCellDef="let element">
+                <button type="button" class="btn btn-link" (click)="OrgId=element._OrgId;OrgStatusId=element._OrgStatusId;updatedisplay=true;">{{element._OrgName}}</button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Email">
+              <th scope="col" mat-header-cell *matHeaderCellDef> EMAIL </th>
+              <td data-label="EMAIL" mat-cell *matCellDef="let element"> {{element._OrgEmail}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="PhoneNumber">
+              <th scope="col" mat-header-cell *matHeaderCellDef>PHONE NUMBER</th>
+              <td data-label="PHONE NO" mat-cell *matCellDef="let element">{{element._OrgNumber}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Plan">
+              <th scope="col" mat-header-cell *matHeaderCellDef>PLAN</th>
+              <td data-label="PLAN" mat-cell *matCellDef="let element">
+                <span class="text-success" *ngIf="element._OrgPlanId == 1">FREE</span>
+                <span class="text-info" *ngIf="element._OrgPlanId == 2">PLUS</span>
+                <span class="teamme-color" *ngIf="element._OrgPlanId == 3">PRO</span>
+              </td>
+            </ng-container>
+            
+
+            <ng-container matColumnDef="Status">
+              <th scope="col" mat-header-cell *matHeaderCellDef>STATUS</th>
+              <td data-label="STATUS" mat-cell *matCellDef="let element">
+                <span class="badge badge-secondary" *ngIf="element._OrgStatusId == 1">Created</span>
+                <span class="badge badge-success" *ngIf="element._OrgStatusId == 2">Active</span>
+                <span class="badge badge-warning" *ngIf="element._OrgStatusId == 3">Paused</span>
+                <span class="badge badge-danger" *ngIf="element._OrgStatusId == 5">Rejected</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="CreateUser">
+              <th scope="col" mat-header-cell *matHeaderCellDef>CREATE USER</th>
+              <td data-label="CREATE USER" mat-cell *matCellDef="let element">
+                <i class="fa fa-user" (click)="CleanError(element);"></i>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ViewUser">
+              <th scope="col" mat-header-cell *matHeaderCellDef>VIEW USER</th>
+              <td data-label="VIEW USER" mat-cell *matCellDef="let element">
+                <i class="fa fa-list text-info" [routerLink]="['/orguser',element._OrgId]"></i>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+        <div class="card-body" [hidden]="OrganizationLength != 0">
+          <h4 class="text-danger text-center">NO RECORD FOUND</h4>
+        </div>
+      </div>
+      <!--/.col-->
+    </div>
+  </div>
+</div>
+
+<p-dialog header="CREATE ADMIN" [(visible)]="createdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <form>
+        <div class="mb-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-user"></i></span>
+            </div>
+            <input type="text" [(ngModel)]="FirstName" [ngModelOptions]="{standalone: true}" placeholder="First Name" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrFirstName != undefined && ErrFirstName != ''">{{ErrFirstName}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-user"></i></span>
+            </div>
+            <input type="text" [(ngModel)]="LastName" [ngModelOptions]="{standalone: true}" placeholder="Last Name" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrLastName != undefined && ErrLastName != ''">{{ErrLastName}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">@</span>
+            </div>
+            <input type="email" [(ngModel)]="EmailId" [ngModelOptions]="{standalone: true}" placeholder="Email Address" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrEmailId != undefined && ErrEmailId != ''">{{ErrEmailId}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-lock"></i></span>
+            </div>
+            <input type="text" [(ngModel)]="PhoneNo" [ngModelOptions]="{standalone: true}" placeholder="Number" class="form-control" [disabled]="FormDisabled">
+          </div>
+          <div class="text-left mt-1">
+            <span class="text-danger" *ngIf="ErrPhoneNo != undefined && ErrPhoneNo != ''">{{ErrPhoneNo}}</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="createdisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="CreateAdmin()" [disabled]="FormDisabled" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="UPDATE ORGANIZATION" [(visible)]="updatedisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" [(ngModel)]="OrgStatusId" [value]="2">
+        <label class="form-check-label" for="inlineRadio1">ACTIVE</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" [(ngModel)]="OrgStatusId" [value]="3">
+        <label class="form-check-label" for="inlineRadio2">PAUSED</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" [(ngModel)]="OrgStatusId" [value]="5">
+        <label class="form-check-label" for="inlineRadio3">REJECTED</label>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="updatedisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="UpdateOrgStatus()" [disabled]="FormDisabled" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>

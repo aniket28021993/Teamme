@@ -1,0 +1,332 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="animated fadeIn">
+  <i class="fa fa-chevron-left cur-pointer" (click)="PrevUserRecord()" *ngIf="showleft"></i>
+  <div id="a{{user.UserId}}" *ngFor="let user of ShowAssignedUser" style="display:inline-block;" class="mb-3 text-center rounded-circle user-filter">
+    <div class="teamme-bg-color rounded-circle text-white m-1 shadow-lg text-uppercase cur-pointer text-center" style="height:50px; width:50px; padding:15px; display:inline-block" title="{{user.UserName}}" (click)="AssignedTo = user.UserId;GetAllApiCall();UserFilter(user.UserName);"><span>{{user.UserInitial}}</span></div>
+  </div>
+  <i class="fa fa-chevron-right cur-pointer" (click)="NextUserRecord()" *ngIf="showright"></i>
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-12">
+      <div class="card shadow-lg">
+        <div class="card-body page-menu">
+          <div class="row">
+            <div class="col-lg-6 col-xs-12">
+              <h3 class="teamme-color">Welcome {{UserName}},</h3>
+              <h5 class="text-gray-700">You can track progress of <span class="teamme-color">{{DashboardName}}</span> using analytics view of  Backlog, Task, Enhancement, Bug and TestCase.</h5>
+              <button type="button" (click)="GoToMainDashboard()" class="btn btn-outline-primary">Go To Project</button>
+            </div>
+            <div class="col-lg-6 col-xs-12">
+              <img class="img-fluid px-xl-4 mt-xxl-n5" src="../../../assets/img/dashboard.png">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-lg-6 col-sm-12" *ngIf="DashboardCount != null">
+      <div class="row">
+        <div class="col-lg-4 col-sm-12">
+          <div class="card-box shadow-lg cur-pointer" [routerLink]="['/backlog']">
+            <div class="inner text-info">
+              <h3 *ngIf="DashboardCount != null">{{DashboardCount.ProductBacklogCount}}</h3>
+              <h3 *ngIf="DashboardCount == null">0</h3>
+              <p>BACKLOG </p>
+            </div>
+            <div class="icon text-info">
+              <i class="fa fa-book" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+          <div class="card-box shadow-lg cur-pointer" [routerLink]="['/task']">
+            <div class="inner text-success">
+              <h3 *ngIf="DashboardCount != null">{{DashboardCount.TaskCount}}</h3>
+              <h3 *ngIf="DashboardCount == null">0</h3>
+              <p>TASK</p>
+            </div>
+            <div class="icon text-success">
+              <i class="fa fa-tasks" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+          <div class="card-box shadow-lg cur-pointer" [routerLink]="['/enhancement']">
+            <div class="inner text-warning">
+              <h3 *ngIf="DashboardCount != null">{{DashboardCount.EnhancementCount}}</h3>
+              <h3 *ngIf="DashboardCount == null">0</h3>
+              <p>ENHANCEMENT</p>
+            </div>
+            <div class="icon text-warning">
+              <i class="fa fa-exchange" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-sm-12">
+          <div class="card-box shadow-lg cur-pointer" [routerLink]="['/bug']">
+            <div class="inner text-danger">
+              <h3 *ngIf="DashboardCount != null">{{DashboardCount.BugCount}}</h3>
+              <h3 *ngIf="DashboardCount == null">0</h3>
+              <p>BUG</p>
+            </div>
+            <div class="icon text-danger">
+              <i class="fa fa-bug fa-spin" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+          <div class="card-box shadow-lg cur-pointer" [routerLink]="['/testcase']">
+            <div class="inner text-primary">
+              <h3 *ngIf="DashboardCount != null">{{DashboardCount.TestCaseCount}}</h3>
+              <h3 *ngIf="DashboardCount == null">0</h3>
+              <p>TESTCASE</p>
+            </div>
+            <div class="icon text-primary">
+              <i class="fa fa-flask" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+          <div class="card-box shadow-lg">
+            <div class="inner text-dark">
+              <h3 *ngIf="DashboardCount != null">{{DashboardCount.PhaseCount}}</h3>
+              <h3 *ngIf="DashboardCount == null">0</h3>
+              <p>USER</p>
+            </div>
+            <div class="icon text-dark">
+              <i class="fa fa-user" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6 col-sm-12">
+      <div class="card shadow-lg" *ngIf="DashboardBacklogState != null">
+        <div class="card-body">
+          <div class="card-title">Backlog States</div>
+          <!--<div class="mb-4">
+    <div class="d-flex"><span class="text-muted text-12">All</span><span class="ml-auto">{{DashboardBacklogState.TotalCount}}</span></div>
+    <div class="progress mb-3 h5px">
+      <div class="progress-bar bg-primary" role="progressbar" [ngStyle]="{'width': DashboardBacklogState.TotalCount + 'px' }"></div>
+    </div>
+  </div>-->
+          <div class="mb-4">
+            <div class="d-flex"><span class="text-muted text-12">New</span><span class="ml-auto">{{DashboardBacklogState.New}}</span></div>
+            <div class="progress mb-3 h5px">
+              <div class="progress-bar bg-primary" role="progressbar" [ngStyle]="{'width': DashboardBacklogState.New + 'px' }"></div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="d-flex"><span class="text-muted text-12">Active</span><span class="ml-auto">{{DashboardBacklogState.Active}}</span></div>
+            <div class="progress mb-3 h5px">
+              <div class="progress-bar bg-success" role="progressbar" [ngStyle]="{'width': DashboardBacklogState.Active + 'px' }"></div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="d-flex"><span class="text-muted text-12">Paused</span><span class="ml-auto">{{DashboardBacklogState.Paused}}</span></div>
+            <div class="progress mb-3 h5px">
+              <div class="progress-bar bg-dark" role="progressbar" [ngStyle]="{'width': DashboardBacklogState.Paused + 'px' }"></div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="d-flex"><span class="text-muted text-12">Testing</span><span class="ml-auto">{{DashboardBacklogState.Testing}}</span></div>
+            <div class="progress mb-3 h5px">
+              <div class="progress-bar bg-dark" role="progressbar" [ngStyle]="{'width': DashboardBacklogState.Testing + 'px' }"></div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="d-flex"><span class="text-muted">Done</span><span class="ml-auto">{{DashboardBacklogState.Done}}</span></div>
+            <div class="progress mb-3 h5px">
+              <div class="progress-bar bg-danger" role="progressbar" [ngStyle]="{'width': DashboardBacklogState.Done + 'px' }"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 col-sm-12">
+      <div class="card shadow-lg" *ngIf="DashboardBugPriorityState != null">
+        <div class="card-body">
+          <div class="card-title">Bug Priority States</div>
+          <!--<div class="row">
+            <div class="col-xl-12 col-sm-12">
+              <div class="card shadow-lg">
+                <div class="card-body text-center">
+                  <h2 class="m-0">{{DashboardBugPriorityState.TotalCount}}</h2>
+                  <h3 class="m-0">TOTAL</h3>
+                </div>
+              </div>
+            </div>
+          </div>-->
+          <div class="row">
+            <div class="col-xl-6 col-sm-12">
+              <div class="card shadow-lg text-danger text-center">
+                <div class="card-body p-7px">
+                  <h2 class="m-0">{{DashboardBugPriorityState.P1Count}}</h2>
+                  <h3 class="m-0">P1</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6 col-sm-12">
+              <div class="card shadow-lg text-warning text-center">
+                <div class="card-body p-7px">
+                  <h2 class="m-0">{{DashboardBugPriorityState.P2Count}}</h2>
+                  <h3 class="m-0">P2</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-6 col-sm-12">
+              <div class="card shadow-lg text-info text-center">
+                <div class="card-body p-7px">
+                  <h2 class="m-0">{{DashboardBugPriorityState.P3Count}}</h2>
+                  <h3 class="m-0">P3</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6 col-sm-12">
+              <div class="card shadow-lg text-primary text-center">
+                <div class="card-body p-7px">
+                  <h2 class="m-0">{{DashboardBugPriorityState.P4Count}}</h2>
+                  <h3 class="m-0">P4</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-3">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <div class="card-title">Task</div>
+          <canvas id="TaskChart" width="200" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <div class="card-title">Enhancement</div>
+          <canvas id="EnhancementChart" width="200" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <div class="card-title">Bug</div>
+          <canvas id="BugChart" width="200" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <div class="card-title">TestCase</div>
+          <canvas id="TestCaseChart" width="200" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6 col-xs-12">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <div class="card-title">
+              <a>BACKLOG ESTIMATION</a>
+              <i class="fa fa-cog pull-right fa-spin teamme-color cur-pointer" (click)="BindBacklogEstimationFilter();"></i>
+            </div>            
+          <div class="card-body">
+            <div class="text-danger text-center" *ngIf="IsEstimation">NO RECORD FOUND</div>
+            <div id="EstimationContainer" class="canvasgraph"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 col-xs-12">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <div class="card-title">
+            <a>TASK ESTIMATION</a>
+            <i class="fa fa-cog pull-right fa-spin teamme-color cur-pointer" (click)="BindTaskEstimationFilter();"></i>
+          </div>
+          <div class="card-body">
+            <div class="text-danger text-center" *ngIf="IsEstimationTask">NO RECORD FOUND</div>
+            <div id="TaskContainer" class="canvasgraph"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog header="BACKLOG ESTIMATION" [(visible)]="backlogdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <ng-multiselect-dropdown [placeholder]="'Backlog'"
+                               [data]="Userobj"
+                               [(ngModel)]="selectedItems"
+                               [settings]="dropdownSettings"
+                               [disabled]="FormDisabled">
+      </ng-multiselect-dropdown>
+      <div class="text-left mt-1">
+        <span class="text-danger" *ngIf="PopUpErroMessage != undefined || PopUpErroMessage != ''">{{PopUpErroMessage}}</span>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="CloseEstimation()" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="BindBacklogEstimationFilterValue()" [disabled]="FormDisabled" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="TASK ESTIMATION" [(visible)]="taskdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <ng-multiselect-dropdown [placeholder]="'Task'"
+                               [data]="Userobj"
+                               [(ngModel)]="TaskselectedItems"
+                               [settings]="taskdropdownSettings"
+                               [disabled]="FormDisabled">
+      </ng-multiselect-dropdown>
+      <div class="text-left mt-1">
+        <span class="text-danger" *ngIf="PopUpErroMessage != undefined || PopUpErroMessage != ''">{{PopUpErroMessage}}</span>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="CloseTask()" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="BindTaskEstimationFilterValue()" [disabled]="FormDisabled" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="PROJECT TOUR" [(visible)]="tourdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom tour-dialog" [closable]="true">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="pt-3 pb-5" *ngIf="UserType != 5">
+        1st Step : Create Phase. <a [routerLink]="['/phase']">Go to Phase</a> <br />
+        2nd Step : Create Backlog. <br />
+        3rd Step : Create Task, Bug, Enhancement and TestCase.
+      </h3>
+      <h3 class="pt-3 pb-5" *ngIf="UserType == 5">
+        1nd Step : Create Backlog. <a [routerLink]="['/backlog']">Go to Backlog</a> <br />
+        2rd Step : Create Task, Bug, Enhancement and TestCase.
+      </h3>
+    </div>
+  </div>
+</p-dialog>

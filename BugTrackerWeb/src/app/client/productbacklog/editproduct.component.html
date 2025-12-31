@@ -1,0 +1,96 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+  <mat-tab-group class="shadow-lg" *ngIf="ProductBacklogDataEdit != null">
+    <mat-tab label="Backlog">
+      <form class="form-custom m-4">
+        <div class="row">
+          <div class="form-group col-lg-12">
+            <label class="teamme-color">Title <span class="teamme-color">*</span></label>
+            <input type="text" id="text-input" name="text-input" [(ngModel)]="ProductBacklogDataEdit.Title" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Title" [disabled]="FormDisabled">
+          </div>
+          <div class="form-group col-lg-12">
+            <label class="teamme-color">Description</label>
+            <ckeditor [(ngModel)]="ProductBacklogDataEdit.Description" [ngModelOptions]="{standalone: true}" [config]="{extraPlugins: 'divarea'}" [disabled]="FormDisabled"></ckeditor>
+          </div>
+          <div class="form-group col-lg-6">
+            <label class="teamme-color">State</label>
+            <mat-form-field class="mat-dropdown">
+              <mat-select [(ngModel)]="ProductBacklogDataEdit.State" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                <mat-option *ngFor="let TaskArr of TaskStateArr" [value]="TaskArr.id">
+                  {{TaskArr.title}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-group col-lg-6">
+            <label class="teamme-color">Estimation (hrs)</label>
+            <input type="number" [(ngModel)]="ProductBacklogDataEdit.Estimation" [ngModelOptions]="{standalone: true}" id="text-input" name="text-input" class="form-control" placeholder="Estimation">
+          </div>
+          <div class="form-group col-lg-6">
+            <label class="teamme-color">Owner</label>
+            <mat-form-field class="mat-dropdown">
+              <mat-select [(ngModel)]="ProductBacklogDataEdit.AssignedTo" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                  {{User.UserName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-group col-lg-6">
+            <label class="teamme-color">Developer</label>
+            <mat-form-field class="mat-dropdown">
+              <mat-select [(ngModel)]="ProductBacklogDataEdit.AssignedDeveloper" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                  {{User.UserName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-group col-lg-6">
+            <label class="teamme-color">Designer</label>
+            <mat-form-field class="mat-dropdown">
+              <mat-select [(ngModel)]="ProductBacklogDataEdit.AssignedDesigner" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                  {{User.UserName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-group col-lg-6">
+            <label class="teamme-color">Tester</label>
+            <mat-form-field class="mat-dropdown">
+              <mat-select [(ngModel)]="ProductBacklogDataEdit.AssignedTester" [ngModelOptions]="{standalone: true}" [disabled]="FormDisabled">
+                <mat-option *ngFor="let User of AssignUserobj" [value]="User.UserId">
+                  {{User.UserName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-12 text-right">
+            <button type="button" class="btn btn-outline-primary" (click)="EditProductBacklog()" [disabled]="FormDisabled">Save changes</button>
+          </div>
+        </div>
+      </form>
+    </mat-tab>
+    <mat-tab label="Comment">
+      <app-comment [ProductBacklogId]="ProductBacklogDataEdit.ProductBacklogId" [CommentTypeId]="1"></app-comment>
+    </mat-tab>
+    <mat-tab label="Recent Activity">
+      <app-recentactivity [CommonId]="ProductBacklogDataEdit.ProductBacklogId" [RecentActivityId]="1"></app-recentactivity>
+    </mat-tab>
+    <mat-tab label="Files">
+      <div class="card">
+        <div class="card-body">
+          <input type="file" id="filecontrol" accept=".pdf,.doc,.docx,.xls,.csv,.ppt,.pptx,image/*" multiple (change)="onFileChange($event,ProductBacklogDataEdit.ProductBacklogId)">
+          <label for="filecontrol">choose a file</label>
+          <ul class="list-none p-0">
+            <li class="alert alert-warning alert-dismissible fade show m-1 p-1" *ngFor="let file of ProductBacklogDataEdit.productBacklogFileDTO">
+              {{file.FileName}}
+              <i class="cur-pointer fa fa-close text-danger float-right ml-3" (click)="DeleteProductBacklogFile(file.ProductBacklogFileId)"></i>
+              <a href="{{Url}}{{file.RefFileName}}&FileName={{file.FileName}}"><i class="cur-pointer fa fa-download text-primary float-right"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>

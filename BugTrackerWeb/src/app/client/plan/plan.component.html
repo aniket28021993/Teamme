@@ -1,0 +1,167 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row pricing text-center">
+  <div class="col-lg-12 col-xs-12">
+    <div class="row">
+      <div class="col-lg-4 col-xs-12">
+        <div class="card border-0 shadow-lg">
+          <div class="card-body">
+            <h3 class="card-title text-uppercase font-weight-bold text-muted">Free <span *ngIf="PlanActiveId == 1" class="text-success">&nbsp;(ACTIVE)</span></h3>
+            <h1 class="text-muted"><i class="fa fa-inr"></i> 0<span class="text-muted small">/FOREVER</span></h1>
+            <hr />
+            <div class="text-left">
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <strong class="text-muted"> 10 Users</strong>
+              <br />
+              <i class="fa fa-close text-danger"></i>
+              &nbsp;
+              <span> Bulk Upload</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Dashboard</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Project</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Phase</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Backlog</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Taks</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Enhancement</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Bug</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Test Case</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-outline-dark my-2 my-sm-0 text-uppercase btn-block" type="button" disabled>TRY NOW</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-xs-12">
+        <div class="card border-0 shadow-lg">
+          <div class="card-body">
+            <h3 class="card-title text-uppercase font-weight-bold">PLUS<span *ngIf="PlanActiveId == 2" class="text-success">&nbsp;(ACTIVE)</span></h3>
+            <h1><i class="fa fa-inr"></i> 10,000<span class="text-muted small">/month</span></h1>
+            <hr />
+            <div class="text-left">
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <strong> 30 Users</strong>
+              <br />
+              <i class="fa fa-close text-danger"></i>
+              &nbsp;
+              <span> Bulk Upload</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Dashboard</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Project</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Phase</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Backlog</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Taks</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Enhancement</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Bug</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Test Case</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-dark my-2 my-sm-0 text-uppercase btn-block" type="button" (click)="UpdateOrgPlan(2)" [disabled]="PlanActiveId == 2">BUY NOW</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-xs-12">
+        <div class="card border-0 shadow-lg">
+          <div class="card-body">
+            <h3 class="card-title text-uppercase font-weight-bold teamme-color">PRO<span *ngIf="PlanActiveId == 3" class="text-success">&nbsp;(ACTIVE)</span></h3>
+            <h1 class="teamme-color"><i class="fa fa-inr"></i> 20,000<span class="text-muted small">/month</span></h1>
+            <hr />
+            <div class="text-left">
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <strong class="teamme-color"> Unlimited Users</strong>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Bulk Upload</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Dashboard</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Project</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Phase</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Backlog</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Taks</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Enhancement</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Bug</span>
+              <br />
+              <i class="fa fa-check text-success"></i>
+              &nbsp;
+              <span> Test Case</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-danger my-2 my-sm-0 text-uppercase btn-block" type="button" (click)="UpdateOrgPlan(3)" [disabled]="PlanActiveId == 3">BUY NOW</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

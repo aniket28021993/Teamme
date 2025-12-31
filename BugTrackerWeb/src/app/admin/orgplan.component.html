@@ -1,0 +1,45 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card shadow-lg">
+      <div class="card-body table-custom" [hidden]="PlanLength == 0">
+        <table mat-table [dataSource]="Plan" matSort class="mat-elevation-z8">
+          <ng-container matColumnDef="PlanId">
+            <th scope="col" mat-header-cell *matHeaderCellDef>ID</th>
+            <td data-label="ID" mat-cell *matCellDef="let element"> {{element.UpdateOrgPlanId}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="OrgName">
+            <th scope="col" mat-header-cell *matHeaderCellDef>NAME </th>
+            <td data-label="NAME" mat-cell *matCellDef="let element"> {{element.OrgName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="OrgPlanId">
+            <th scope="col" mat-header-cell *matHeaderCellDef>PLAN ID</th>
+            <td data-label="PLAN ID" mat-cell *matCellDef="let element">
+              <span *ngIf="element.OrgPlanId==2">PLUS PLAN</span>
+              <span *ngIf="element.OrgPlanId==3">PRO PLAN</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Approve">
+            <th scope="col" mat-header-cell *matHeaderCellDef>APPROVE</th>
+            <td data-label="APPROVE" mat-cell *matCellDef="let element">
+              <i class="fa fa-plus" (click)="ApproveOrgPlan(element.OrgId,element.OrgPlanId,element.UpdateOrgPlanId)"></i>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+      <div class="card-body" [hidden]="PlanLength != 0">
+        <h4 class="text-danger text-center">NO RECORD FOUND</h4>
+      </div>
+
+    </div>
+  </div>
+  <!--/.col-->
+</div>

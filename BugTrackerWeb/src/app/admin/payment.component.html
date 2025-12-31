@@ -1,0 +1,86 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <div class="row page-menu">
+          <div class="col-lg-12 col-xs-12 text-lg-right text-sm-left mb-4">
+            <button type="button" class="btn btn-outline-primary" (click)="PopUpOpen()">ADD PAYMENT</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body table-custom" [hidden]="PaymentLength == 0">
+        <table mat-table [dataSource]="Payment" matSort class="mat-elevation-z8">
+          <ng-container matColumnDef="PaymentId">
+            <th scope="col" mat-header-cell *matHeaderCellDef>ID</th>
+            <td data-label="ID" mat-cell *matCellDef="let element"> {{element.PaymentId}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="OrgName">
+            <th scope="col" mat-header-cell *matHeaderCellDef>ORG NAME </th>
+            <td data-label="ORG NAME" mat-cell *matCellDef="let element"> {{element.OrgName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Amount">
+            <th scope="col" mat-header-cell *matHeaderCellDef>AMOUNT</th>
+            <td data-label="AMOUNT" mat-cell *matCellDef="let element">{{element.Amount}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="MonthDate">
+            <th scope="col" mat-header-cell *matHeaderCellDef>MONTH</th>
+            <td data-label="MONTH" mat-cell *matCellDef="let element">{{element.MonthDate | date}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+      <div class="card-body" [hidden]="PaymentLength != 0">
+        <h4 class="text-danger text-center">NO RECORD FOUND</h4>
+      </div>
+
+    </div>
+  </div>
+  <!--/.col-->
+</div>
+
+<!--CREATE PHASE-->
+<p-dialog header="ADD PAYMENT" [(visible)]="adddisplay" [modal]="true" [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="form-horizontal form-custom">
+        <div class="form-group row">
+          <div class="col-md-12">
+            <mat-form-field class="mat-dropdown">
+              <mat-label>Select Organization</mat-label>
+              <mat-select [(ngModel)]="OrgId" [ngModelOptions]="{standalone: true}" [disabled]="OrganzationList.length==0">
+                <mat-option *ngFor="let proj of OrganzationList" [value]="proj._OrgId">
+                  {{proj._OrgName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="text-left mt-1">
+              <span class="text-danger" *ngIf="PopUpErroOrgId != undefined || PopUpErroOrgId != ''">{{PopUpErroOrgId}}</span>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="input-group">
+              <input type="number" id="input1-group2" name="input1-group2" [(ngModel)]="OrgAmount" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Amount">
+            </div>
+            <div class="text-left mt-1">
+              <span class="text-danger" *ngIf="PopUpErroMessage != undefined || PopUpErroMessage != ''">{{PopUpErroMessage}}</span>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="adddisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="AddPayment()" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>

@@ -1,0 +1,167 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row page-menu">
+  <div class="col-12 table-custom" #epltable>
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-9">
+            <button type="button" class="btn btn-outline-primary m-1" (click)="OpenPopUpCreate()">CREATE PHASE</button>
+            <button type="button" class="btn btn-outline-primary m-1" (click)="exportToExcel()" [hidden]="PhaseLength == 0">EXPORT TO EXCEL</button>
+          </div>
+          <div class="col-lg-3">
+            <input type="text" class="form-control m-1" [(ngModel)]="SearchTaskval" (ngModelChange)="OnKeyPress()" placeholder="Search phase">
+          </div>
+        </div>
+      </div>
+      <div class="card-body" [hidden]="PhaseLength == 0">
+        <table mat-table [dataSource]="Phase" matSort class="mat-elevation-z8 shadow-lg">
+          <ng-container matColumnDef="PhaseId">
+            <th scope="col" mat-header-cell *matHeaderCellDef>ID</th>
+            <td data-label="ID" mat-cell *matCellDef="let element"> {{element.PhaseId}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="PhaseName">
+            <th scope="col" mat-header-cell *matHeaderCellDef>NAME </th>
+            <td data-label="NAME" mat-cell *matCellDef="let element"> {{element.Description}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="StartDate">
+            <th scope="col" mat-header-cell *matHeaderCellDef>START DATE </th>
+            <td data-label="START DATE" mat-cell *matCellDef="let element"> {{element.StartDate | date}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="EndDate">
+            <th scope="col" mat-header-cell *matHeaderCellDef>END DATE </th>
+            <td data-label="END DATE" mat-cell *matCellDef="let element"> {{element.EndDate | date}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Edit">
+            <th scope="col" mat-header-cell *matHeaderCellDef>EDIT</th>
+            <td data-label="EDIT" mat-cell *matCellDef="let element">
+              <i class="fa fa-edit text-primary cur-pointer" (click)="BindEditPhase(element);editdisplay=true;"></i>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Delete">
+            <th scope="col" mat-header-cell *matHeaderCellDef>DELETE</th>
+            <td data-label="DELETE" mat-cell *matCellDef="let element">
+              <i class="fa fa-trash text-danger cur-pointer" (click)="PhaseObj = element;deletedisplay=true;"></i>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons (page)="pageEvents($event)"></mat-paginator>
+      </div>
+      <div class="card-body" [hidden]="PhaseLength != 0">
+        <div class="row">
+          <div class="col-12 text-center">
+            <img class="img-fluid px-xl-4 mt-xxl-n5" src="../../../assets/img/norecord.gif" height="350" width="350">
+          </div>
+        </div>
+      </div>
+      </div>
+  </div>
+</div>
+
+
+<!--CREATE PHASE-->
+<p-dialog header="CREATE PHASE" [(visible)]="createdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="form-horizontal form-custom">
+        <div class="form-group row">
+          <div class="col-md-12">
+            <div class="input-group">
+              <input type="text" id="input1-group2" name="input1-group2" [(ngModel)]="Description" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Phase Name" [disabled]="FormDisabled">
+            </div>
+            <div class="text-left mt-1">
+              <span class="text-danger" *ngIf="PopUpErroMessage != undefined || PopUpErroMessage != ''">{{PopUpErroMessage}}</span>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <mat-form-field appearance="fill" class="mat-dropdown">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="start" [(ngModel)]="StartDate" [ngModelOptions]="{standalone: true}" disabled>
+              <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+              <mat-datepicker #start disabled="false"></mat-datepicker>
+            </mat-form-field>
+            <div class="text-left mt-1">
+              <span class="text-danger" *ngIf="PopUpStartErrMessage != undefined || PopUpStartErrMessage != ''">{{PopUpStartErrMessage}}</span>
+            </div>
+            <mat-form-field appearance="fill" class="mat-dropdown">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="end" [(ngModel)]="EndDate" [min]="StartDate" [ngModelOptions]="{standalone: true}" disabled>
+              <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+              <mat-datepicker #end [disabled]="StartDate==undefined"></mat-datepicker>
+            </mat-form-field>
+            <div class="text-left mt-1">
+              <span class="text-danger" *ngIf="PopUpEndErrMessage != undefined || PopUpEndErrMessage != ''">{{PopUpEndErrMessage}}</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="createdisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="CreatePhase()" [disabled]="FormDisabled" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>
+
+<!--EDIT PHASE-->
+<p-dialog header="EDIT PHASE" [(visible)]="editdisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="form-horizontal form-custom">
+        <div class="form-group row">
+          <div class="col-md-12">
+            <div class="input-group" *ngIf="PhaseEdit != null">
+              <input type="text" id="input1-group2" name="input1-group2" [(ngModel)]="PhaseEdit.Description" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Phase Name" [disabled]="FormDisabled">
+            </div>
+            <div class="text-left mt-1">
+              <span class="text-danger" *ngIf="PopUperrordescription != undefined || PopUperrordescription != ''">{{PopUperrordescription}}</span>
+            </div>
+          </div>
+          <div class="col-md-12" *ngIf="PhaseEdit != null">
+            <mat-form-field appearance="fill" class="mat-dropdown">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="start" [(ngModel)]="PhaseEdit.StartDate" [ngModelOptions]="{standalone: true}" disabled>
+              <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+              <mat-datepicker #start disabled="false"></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="mat-dropdown">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="end" [(ngModel)]="PhaseEdit.EndDate" [min]="PhaseEdit.StartDate" [ngModelOptions]="{standalone: true}" disabled>
+              <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+              <mat-datepicker #end disabled="false"></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="editdisplay=false" class="btn btn-outline-primary">Close</button>
+    <button type="button" (click)="EditPhase()" [disabled]="FormDisabled" class="btn btn-outline-primary">Save</button>
+  </p-footer>
+</p-dialog>
+
+<!--DELETE PHASE-->
+<p-dialog header="DELETE PHASE" [(visible)]="deletedisplay" [modal]="true" [baseZIndex]="10000"
+          [draggable]="false" styleClass="p-dialog-custom" [closable]="false">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center pt-5 pb-5">Are you sure want to delete with it's backlog,task,enhancement and bugs.</h3>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" (click)="deletedisplay=false" class="btn btn-outline-primary">No</button>
+    <button type="button" (click)="DeletePhase(PhaseObj.PhaseId)" [disabled]="FormDisabled" class="btn btn-outline-primary">Yes</button>
+  </p-footer>
+</p-dialog>
+
