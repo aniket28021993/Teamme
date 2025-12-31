@@ -1,0 +1,73 @@
+<p-toast [baseZIndex]="5000"></p-toast>
+
+<div class="row page-menu">
+  <div class="col-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <h4 class="mb-0">Daily Sprint Tasks</h4>
+            <small class="text-muted">{{CurrentDateLabel}}</small>
+          </div>
+          <div class="col-lg-3">
+            <mat-form-field class="mat-dropdown w-100">
+              <mat-select [(ngModel)]="selectedTaskView" [ngModelOptions]="{standalone: true}" (selectionChange)="onTaskViewChange($event.value)" placeholder="Task view">
+                <mat-option *ngFor="let option of TaskViewOptions" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 text-lg-right">
+            <span class="badge badge-light">Total: {{DataTaskLength}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body" [hidden]="DataTaskLength == 0">
+        <table mat-table [dataSource]="DataTask" matSort class="mat-elevation-z8 shadow-lg">
+          <ng-container matColumnDef="TaskId">
+            <th scope="col" mat-header-cell *matHeaderCellDef>ID</th>
+            <td data-label="ID" mat-cell *matCellDef="let element">{{element.ProductBacklogDataId}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="TaskTitle">
+            <th scope="col" mat-header-cell *matHeaderCellDef>TITLE</th>
+            <td data-label="TITLE" mat-cell *matCellDef="let element">
+              <span class="text-truncate d-inline-block" title="{{element.Title}}">{{element.Title}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="TaskState">
+            <th scope="col" mat-header-cell *matHeaderCellDef>STATE</th>
+            <td data-label="STATE" mat-cell *matCellDef="let element">{{element.StateName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="TaskAssignedTo">
+            <th scope="col" mat-header-cell *matHeaderCellDef>ASSIGNED</th>
+            <td data-label="ASSIGNED" mat-cell *matCellDef="let element">{{element.UserName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="DailyStatus">
+            <th scope="col" mat-header-cell *matHeaderCellDef>DONE TODAY</th>
+            <td data-label="DONE TODAY" mat-cell *matCellDef="let element">
+              <mat-checkbox (change)="toggleDailyStatus(element.ProductBacklogDataId, $event.checked)" [checked]="isDailyStatusChecked(element.ProductBacklogDataId)"></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+
+      <div class="card-body" [hidden]="DataTaskLength != 0">
+        <div class="row">
+          <div class="col-12 text-center">
+            <img class="img-fluid px-xl-4 mt-xxl-n5" src="../../../assets/img/norecord.gif" height="350" width="350">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -46,6 +46,11 @@ export const ClientItems: INavData[] = [
     icon: 'fa fa-tasks',
   },
   {
+    name: 'DAILY TASK',
+    url: '/daily-task',
+    icon: 'fa fa-check-square-o',
+  },
+  {
     name: 'ENHANCEMENT',
     url: '/enhancement',
     icon: 'fa fa-exchange',
@@ -94,6 +99,11 @@ export const TeamLeadItems: INavData[] = [
     icon: 'fa fa-tasks',
   },
   {
+    name: 'DAILY TASK',
+    url: '/daily-task',
+    icon: 'fa fa-check-square-o',
+  },
+  {
     name: 'ENHANCEMENT',
     url: '/enhancement',
     icon: 'fa fa-exchange',
@@ -130,6 +140,11 @@ export const TeamMemberItems: INavData[] = [
     name: 'TASK',
     url: '/task',
     icon: 'fa fa-tasks',
+  },
+  {
+    name: 'DAILY TASK',
+    url: '/daily-task',
+    icon: 'fa fa-check-square-o',
   },
   {
     name: 'ENHANCEMENT',

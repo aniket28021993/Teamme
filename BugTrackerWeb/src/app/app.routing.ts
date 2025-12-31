@@ -50,6 +50,7 @@ import { ThankYouComponent } from './views/thankyou/thankyou.component';
 import { ScrumBoardComponent } from './client/scrumboard/scrumboard.component';
 import { PrivacyPolicyComponent } from './views/policy/privacypolicy.component';
 import { TermOfServiceComponent } from './views/policy/termofservice.component';
+import { DailyTaskComponent } from './client/dailytask/dailytask.component';
 
 export const routes: Routes = [
   {
@@ -115,6 +116,10 @@ export const routes: Routes = [
       {
         path: 'scrumboard',
         component: ScrumBoardComponent
+      },
+      {
+        path: 'daily-task',
+        component: DailyTaskComponent
       },
       {
         path: 'maindashboard',
