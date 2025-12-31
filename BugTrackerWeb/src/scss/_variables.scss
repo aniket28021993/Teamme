@@ -1,1 +1,13 @@
 // Variable overrides
+$teamme-primary: #2f6fed;
+$teamme-primary-dark: #1b3fa3;
+$teamme-accent: #ffb347;
+$teamme-bg: #f5f7fb;
+$teamme-surface: #ffffff;
+$teamme-text: #2d3748;
+$teamme-muted: #64748b;
+
+$primary: $teamme-primary;
+$body-bg: $teamme-bg;
+$body-color: $teamme-text;
+$font-family-base: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
