@@ -38,9 +38,13 @@
     <!--<app-sidebar-minimizer></app-sidebar-minimizer>-->
   </app-sidebar>
   <!-- Main content -->
-  <main class="main" (click)="closeNav()">
-    <div class="col-12">
-      <h2 class="p-1">{{Breadcrumb}}</h2>
+  <main class="main main-content" (click)="closeNav()">
+    <div class="page-title">
+      <div class="page-title__meta">
+        <h2 class="page-title__text">{{Breadcrumb}}</h2>
+        <p class="page-title__hint">Stay on top of updates with a refreshed TeamME workspace.</p>
+      </div>
+      <div class="page-title__badge">Workspace</div>
     </div>
     <div class="container-fluid">
       <router-outlet></router-outlet>
