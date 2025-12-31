@@ -99,8 +99,9 @@
 
 .login-logo {
   font-family: cursive;
-  font-size: 25px;
-  margin-top: 50px !important;
+  font-size: 24px;
+  margin-top: 52px !important;
+  letter-spacing: 0.6px;
 }
 
 .app-body.teamme-bg-color
@@ -166,6 +167,12 @@ app-sidebar.sidebar {
   background-color: $teamme-primary !important;
 }
 
+.login-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 50%),
+    linear-gradient(135deg, #2f6fed 0%, #2d7efc 45%, #3b82f6 100%);
+}
+
 .teamme-ty-color {
   background-color: $teamme-primary;
   display: initial;
@@ -186,11 +193,13 @@ app-sidebar.sidebar {
   input {
     box-shadow: none;
     border: none;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.45);
     border-radius: 0;
+    padding: 12px 0;
+    font-size: 15px;
 
     &:focus {
-      border-color: black;
+      border-color: $teamme-primary-dark;
       box-shadow: none;
     }
   }
@@ -333,43 +342,109 @@ z-index:1000;}
 
 //LOGIN
 .user_card {
-  height: 400px;
-  width: 450px;
+  min-height: 420px;
+  width: 460px;
   margin-top: auto;
   margin-bottom: auto;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.96);
   position: relative;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  //padding: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  border-radius: 5px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+  border-radius: 18px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .brand_logo_container {
   position: absolute;
-  height: 150px;
-  width: 150px;
-  top: -75px;
+  height: 160px;
+  width: 160px;
+  top: -80px;
   border-radius: 50%;
-  background: $teamme-primary;
+  background: linear-gradient(135deg, #2f6fed 0%, #4f8efc 100%);
   padding: 10px;
   text-align: center;
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.18);
 }
 
 .brand_logo {
-  height: 130px;
-  width: 130px;
+  height: 140px;
+  width: 140px;
   border-radius: 50%;
   border: 1px solid white;
   padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form_container {
   margin-top: 100px;
+}
+
+.login-page {
+  .links {
+    font-size: 14px;
+    color: #475569;
+
+    a {
+      color: $teamme-primary-dark;
+      font-weight: 600;
+    }
+  }
+}
+
+.login-page .text-danger {
+  color: #ef4444 !important;
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.login-subtitle {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.btn-login {
+  background-image: linear-gradient(135deg, $teamme-primary 0%, $teamme-primary-dark 100%);
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+
+  &:hover {
+    background-position: right center;
+    box-shadow: 0 16px 30px rgba(37, 99, 235, 0.3);
+  }
+}
+
+@media (max-width: 576px) {
+  .user_card {
+    width: 92%;
+    min-height: 440px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .brand_logo_container {
+    height: 130px;
+    width: 130px;
+    top: -65px;
+  }
+
+  .brand_logo {
+    height: 110px;
+    width: 110px;
+  }
 }
 
 .forgot_container {
