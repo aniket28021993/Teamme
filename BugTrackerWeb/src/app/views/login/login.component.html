@@ -1,54 +1,92 @@
 <p-toast [baseZIndex]="5000"></p-toast>
 
-<div class="app-body teamme-bg-color login-page">
+<div class="app-body teamme-bg-color login-page login-v2">
   <main class="main d-flex align-items-center">
     <div class="container">
-      <div class="d-flex justify-content-center">
-        <div class="user_card">
-          <div class="d-flex justify-content-center">
-            <div class="brand_logo_container">
-              <div class="brand_logo">
-                <p class="text-white login-logo">TeamME</p>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-9">
+          <div class="login-shell">
+            <section class="login-panel">
+              <div class="login-brand">
+                <span class="login-brand__badge">TeamME</span>
+                <h1 class="login-brand__title">Welcome back</h1>
+                <p class="login-brand__subtitle">
+                  Organize projects, track bugs, and collaborate with your team from one workspace.
+                </p>
               </div>
-            </div>
-          </div>
-          <div class="form_container p-5">
-            <div class="login-header text-center">
-              <h2 class="login-title mb-1">Welcome back</h2>
-              <p class="login-subtitle mb-4">Sign in to manage your projects.</p>
-            </div>
-            <form class="form-custom">
-              <div class="mb-3">
-                <div class="input-group">
-                  <input type="text" [(ngModel)]="_Email" [ngModelOptions]="{standalone: true}" placeholder="Email" class="form-control">
+              <div class="login-highlights">
+                <div class="login-highlight">
+                  <span class="login-highlight__icon">✓</span>
+                  <div>
+                    <h3 class="login-highlight__title">Project visibility</h3>
+                    <p class="login-highlight__text">Keep stakeholders aligned with real-time status updates.</p>
+                  </div>
                 </div>
-                <div class="text-left mt-1">
-                  <span class="text-danger" *ngIf="ErrEmail != undefined && ErrEmail != ''">{{ErrEmail}}</span>
-                </div>
-              </div>
-              <div class="mb-3">
-                <div class="input-group">
-                  <input type="password" [(ngModel)]="_Password" [ngModelOptions]="{standalone: true}" placeholder="Password" class="form-control">
-                </div>
-                <div class="text-left mt-1">
-                  <span class="text-danger" *ngIf="ErrPassword != undefined && ErrPassword != ''">{{ErrPassword}}</span>
+                <div class="login-highlight">
+                  <span class="login-highlight__icon">⚡</span>
+                  <div>
+                    <h3 class="login-highlight__title">Fast workflows</h3>
+                    <p class="login-highlight__text">Move issues through your pipeline with zero friction.</p>
+                  </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-12">
-                  <button type="submit" class="btn btn-danger px-4 btn-login btn-block" (click)="UserLogin()">Sign In</button>
-                </div>
-              </div>
-            </form>
-          </div>
+            </section>
 
-          <div class="mt-4">
-            <div class="d-flex justify-content-center links">
-              Don't have an account? <a [routerLink]="['/register']" title="Sign Up!" class="ml-2">Sign Up!</a>
-            </div>
-            <div class="d-flex justify-content-center links pb-5">
-              <a class="text-danger" [routerLink]="['/forgotpassword']">Forgot your password?</a>
-            </div>
+            <section class="login-form-panel">
+              <div class="login-header">
+                <p class="login-logo">Sign in</p>
+                <h2 class="login-title">Access your dashboard</h2>
+                <p class="login-subtitle">Enter your credentials to continue.</p>
+              </div>
+
+              <form class="form-custom">
+                <div class="mb-3">
+                  <label class="login-label">Email address</label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      [(ngModel)]="_Email"
+                      [ngModelOptions]="{standalone: true}"
+                      placeholder="name@company.com"
+                      class="form-control"
+                    >
+                  </div>
+                  <div class="text-left mt-1">
+                    <span class="text-danger" *ngIf="ErrEmail != undefined && ErrEmail != ''">{{ErrEmail}}</span>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="login-label">Password</label>
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      [(ngModel)]="_Password"
+                      [ngModelOptions]="{standalone: true}"
+                      placeholder="••••••••"
+                      class="form-control"
+                    >
+                  </div>
+                  <div class="text-left mt-1">
+                    <span class="text-danger" *ngIf="ErrPassword != undefined && ErrPassword != ''">{{ErrPassword}}</span>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-danger btn-login btn-block" (click)="UserLogin()">Sign In</button>
+                  </div>
+                </div>
+              </form>
+
+              <div class="login-footer">
+                <div class="d-flex justify-content-center links">
+                  Don't have an account? <a [routerLink]="['/register']" title="Sign Up!" class="ml-2">Sign Up!</a>
+                </div>
+                <div class="d-flex justify-content-center links">
+                  <a class="text-danger" [routerLink]="['/forgotpassword']">Forgot your password?</a>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
