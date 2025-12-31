@@ -133,6 +133,7 @@ import { UserService } from './miscellaneous/user.service';
 import { GenericService } from './miscellaneous/generic.service';
 import { PrivacyPolicyComponent } from './views/policy/privacypolicy.component';
 import { TermOfServiceComponent } from './views/policy/termofservice.component';
+import { DailyTaskComponent } from './client/dailytask/dailytask.component';
 
 @NgModule({
   imports: [
@@ -228,7 +229,8 @@ import { TermOfServiceComponent } from './views/policy/termofservice.component';
     MainDashboardComponent,
     ScrumBoardComponent,
     TermOfServiceComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    DailyTaskComponent
   ],
   entryComponents: [SpinnerComponent],
   providers:
