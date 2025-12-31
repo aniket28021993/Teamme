@@ -5,3 +5,11 @@ C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\obj\Debug\BugTrackerM
 C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\obj\Debug\BugTrackerModels.exe
 C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\obj\Debug\BugTrackerModels.pdb
 C:\Users\aniket.d\source\repos\BugTracker\BugTrackerModels\obj\Debug\BugTrackerModels.csprojResolveAssemblyReference.cache
+D:\TestProject\Teamme\BugTrackerModels\bin\Debug\BugTrackerModels.exe.config
+D:\TestProject\Teamme\BugTrackerModels\bin\Debug\BugTrackerModels.exe
+D:\TestProject\Teamme\BugTrackerModels\bin\Debug\BugTrackerModels.pdb
+D:\TestProject\Teamme\BugTrackerModels\obj\Debug\BugTrackerModels.csproj.AssemblyReference.cache
+D:\TestProject\Teamme\BugTrackerModels\obj\Debug\BugTrackerModels.exe.config
+D:\TestProject\Teamme\BugTrackerModels\obj\Debug\BugTrackerModels.csproj.CoreCompileInputs.cache
+D:\TestProject\Teamme\BugTrackerModels\obj\Debug\BugTrackerModels.exe
+D:\TestProject\Teamme\BugTrackerModels\obj\Debug\BugTrackerModels.pdb

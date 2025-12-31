@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36202.13 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugtrackerController", "BugtrackerController\BugtrackerController.csproj", "{8377D5B0-F8EA-4E9A-A726-8974544EA22D}"
 EndProject
@@ -11,9 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTrackerModels", "BugTrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTrackerRepository", "BugTrackerRepository\BugTrackerRepository.csproj", "{5D417A57-D627-4B51-99DD-7A9385F6E7EC}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BugTrackerWeb", "BugTrackerWeb", "{493A485C-774C-4324-8808-3DF45F195877}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BugTrackerWeb", "BugTrackerWeb\", "{493A485C-774C-4324-8808-3DF45F195877}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_64784"
 		Debug.AspNetCompiler.PhysicalPath = "BugTrackerWeb\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64784\"

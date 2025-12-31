@@ -9,3 +9,15 @@ C:\Users\aniket.d\source\repos\BugTracker\BugTrackerRepository\obj\Debug\BugTrac
 C:\Users\aniket.d\source\repos\BugTracker\BugTrackerRepository\obj\Debug\BugTrackerRepository.csproj.CopyComplete
 C:\Users\aniket.d\source\repos\BugTracker\BugTrackerRepository\obj\Debug\BugTrackerRepository.exe
 C:\Users\aniket.d\source\repos\BugTracker\BugTrackerRepository\obj\Debug\BugTrackerRepository.pdb
+D:\TestProject\Teamme\BugTrackerRepository\bin\Debug\BugTrackerRepository.exe.config
+D:\TestProject\Teamme\BugTrackerRepository\bin\Debug\BugTrackerRepository.exe
+D:\TestProject\Teamme\BugTrackerRepository\bin\Debug\BugTrackerRepository.pdb
+D:\TestProject\Teamme\BugTrackerRepository\bin\Debug\BugTrackerModels.exe
+D:\TestProject\Teamme\BugTrackerRepository\bin\Debug\BugTrackerModels.pdb
+D:\TestProject\Teamme\BugTrackerRepository\bin\Debug\BugTrackerModels.exe.config
+D:\TestProject\Teamme\BugTrackerRepository\obj\Debug\BugTrackerRepository.csproj.AssemblyReference.cache
+D:\TestProject\Teamme\BugTrackerRepository\obj\Debug\BugTrackerRepository.exe.config
+D:\TestProject\Teamme\BugTrackerRepository\obj\Debug\BugTrackerRepository.csproj.CoreCompileInputs.cache
+D:\TestProject\Teamme\BugTrackerRepository\obj\Debug\BugTrack.64E3B79D.Up2Date
+D:\TestProject\Teamme\BugTrackerRepository\obj\Debug\BugTrackerRepository.exe
+D:\TestProject\Teamme\BugTrackerRepository\obj\Debug\BugTrackerRepository.pdb
