@@ -146,9 +146,9 @@ html, body {
 
 //main-menu
 app-sidebar.sidebar {
-  background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+  background: darkblue;
   box-shadow: 0 18px 30px rgba(15, 23, 42, 0.2);
-  border-right: 1px solid rgba(148, 163, 184, 0.12);
+  border-right: 1px solid rgba(0, 0, 139, 0.6);
 
   .nav-link {
     color: #cbd5f5;
@@ -430,8 +430,8 @@ ul + button.navbar-toggler
 
 .app-header.navbar {
   z-index: 1000;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  background: darkblue;
+  border-bottom: 1px solid rgba(0, 0, 139, 0.6);
   box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
 }
 
@@ -799,9 +799,9 @@ ul + button.navbar-toggler
 }
 
 .app-footer {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-top: 1px solid rgba(148, 163, 184, 0.22);
-  backdrop-filter: blur(10px);
+  background-color: darkblue;
+  border-top: 1px solid rgba(0, 0, 139, 0.6);
+  color: #ffffff;
 }
 
 .p-7px {
